@@ -1,0 +1,5 @@
+export const setUser = 'setUser'
+export const setCheckuser = 'setCheckuser'
+export const setHost = 'setHost'
+export const Logout = 'Logout'
+export const hostApplied='hostApplied'

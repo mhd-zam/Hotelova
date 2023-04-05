@@ -1,0 +1,2 @@
+export const Add_Property_Aminities = 'Add_Property_Aminities'
+export const Remove_Property_Aminities='Remove_Property_Aminities'

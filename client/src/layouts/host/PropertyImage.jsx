@@ -1,4 +1,4 @@
-import React, { useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Card, CardMedia, Typography, Grid } from '@mui/material'
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload'
 import { Stack } from '@mui/system'
@@ -15,16 +15,32 @@ function Propertyimage({ imgErr }) {
 
     function handledrop(e) {
         e.preventDefault()
-
         const files = Array.from(e.dataTransfer.files)
+        const imagesOnly = files.filter((file) =>
+            file.type.startsWith('image/')
+        )
+
+        if (imagesOnly.length === 0) {
+            alert('Please drop only image files')
+            return
+        }
+
         setImages([...images, ...files])
         setValue([...images, ...files])
     }
 
     function handleFile(e) {
         const files = Array.from(e.target.files)
+
+        const imagesOnly = files.filter((file) =>
+            file.type.startsWith('image/')
+        )
+
+        if (imagesOnly.length === 0) {
+            alert('Please drop only image files')
+            return
+        }
         setImages([...images, ...files])
-        
     }
 
     const removeImage = (IMG) => {
@@ -73,10 +89,14 @@ function Propertyimage({ imgErr }) {
                     />
                     <label htmlFor="file-input">
                         <CloudDownloadIcon
-                            sx={{ fontSize: 100, color: 'blueviolet', cursor: 'pointer' }}
+                            sx={{
+                                fontSize: 100,
+                                color: 'blueviolet',
+                                cursor: 'pointer',
+                            }}
                         />
                         <Typography variant="h6" textAlign={'center'}>
-              DROP
+                            DROP
                         </Typography>
                         <Box
                             component={'div'}
@@ -92,7 +112,7 @@ function Propertyimage({ imgErr }) {
                             }}
                             variant="contained"
                         >
-              upload
+                            upload
                         </Box>
                     </label>
                 </Card>
@@ -125,7 +145,9 @@ function Propertyimage({ imgErr }) {
                                         component="img"
                                         alt=""
                                         src={
-                                            typeof url === 'string' ? url : URL.createObjectURL(url)
+                                            typeof url === 'string'
+                                                ? url
+                                                : URL.createObjectURL(url)
                                         }
                                         title="Image"
                                         sx={{ width: '100%', height: 'auto' }}

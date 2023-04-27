@@ -3,7 +3,7 @@ import LinearStepper from '../layouts/host/LinearStepper'
 import { CssBaseline, Container, Paper, Box } from '@mui/material'
 
 function Hostproperty() {
-    let defaultData = {
+    const defaultData = {
         PropertyName: '',
         Description: '',
         RoomType: '',
@@ -19,13 +19,7 @@ function Hostproperty() {
             lat: Number,
             log: Number,
         },
-        Amenties: {
-            Tv: false,
-            Swimmmingpool: false,
-            Aircondition: false,
-            Gym: false,
-            Restaurants: false,
-        },
+        Amenties: {},
         images: [],
     }
     const isEdit = false
@@ -33,7 +27,11 @@ function Hostproperty() {
         <>
             <CssBaseline />
             <Container maxWidth="lg" sx={{ paddingTop: 5 }}>
-                <Paper component={Box} sx={{ boxShadow: 20, borderRadius: 5 }} p={5}>
+                <Paper
+                    component={Box}
+                    sx={{ boxShadow: 20, borderRadius: 5 }}
+                    p={5}
+                >
                     <LinearStepper defaultData={defaultData} isEdit={isEdit} />
                 </Paper>
             </Container>

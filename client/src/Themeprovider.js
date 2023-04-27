@@ -8,7 +8,7 @@ export const theme0 = createTheme({
             styleOverrides: {
                 root: {
                     width: '98%',
-                    backgroundColor:'#3c4043',
+                    backgroundColor: '#3c4043',
                     ':hover': {
                         backgroundColor: '#bd1e59',
                     },
@@ -16,7 +16,7 @@ export const theme0 = createTheme({
             },
         },
     },
-}) 
+})
 export const theme1 = createTheme({
     components: {
         MuiButton: {
@@ -34,10 +34,9 @@ export const theme1 = createTheme({
     },
 })
 
-function Themeprovider({children}) {
+function Themeprovider({ children }) {
     const theme = createTheme({
         palette: {
-         
             primary: {
                 main: '#955251',
             },
@@ -45,26 +44,23 @@ function Themeprovider({children}) {
                 main: '#a64942',
             },
             mycolor: {
-                main:'#2a3eb1'
+                main: '#2a3eb1',
             },
             lightwhite: {
-                main:'#FFFFFF'
+                main: '#FFFFFF',
             },
             textcolor: {
-                main:'#955251'
+                main: '#955251',
             },
             nav: {
-                main:'#ffffff'
-            }
-           
-           
+                main: '#ffffff',
+            },
+            ApproveClr: {
+                main: '#8A9A5B',
+            },
         },
     })
-    return (
-        <ThemeProvider theme={theme} >
-            {children}
-        </ThemeProvider>
-    )
+    return <ThemeProvider theme={theme}>{children}</ThemeProvider>
 }
 
 export default Themeprovider

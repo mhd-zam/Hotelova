@@ -16,7 +16,8 @@ const userModel = new mongoose.Schema({
     accessToken:String,
     ishosted:Boolean,
     blocked: Boolean,
-    hostingApproval: Boolean
+    hostingApproval: Boolean,
+    Wallet:{type:Number,default:undefined},
 },{timestamps:true},
 { versionKey: false })
 

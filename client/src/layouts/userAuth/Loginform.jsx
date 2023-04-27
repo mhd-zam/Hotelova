@@ -45,17 +45,20 @@ function Form() {
         sendGmaildata(data)
             .then(({ data }) => {
                 console.log(data)
-                const { _id, phonenumber, email, accessToken } = data
+                const { _id, phonenumber, email, username } = data
                 if (phonenumber.length != 13 || email.length < 5) {
                     dispatch(setCheckUser(true))
                 }
                 let obj = {
-                    userDetails: { _id, phonenumber, email },
-                    jwttoken: accessToken,
+                    userDetails: { _id, phonenumber, email, username },
                 }
                 dispatch(setUserDetails(obj))
                 setOpenlogin(false)
-                setAlert({ notify: true, message: 'logged in successfully' })
+                setAlert({
+                    notify: true,
+                    message: 'logged in successfully',
+                    action: 'success',
+                })
                 setOpen(false)
             })
             .catch(() => {
@@ -64,10 +67,10 @@ function Form() {
     }
 
     function handlesubmit() {
-    /* eslint-disable no-useless-escape */
+        /* eslint-disable no-useless-escape */
         if (
             !userDetails.phonenumber.match(/^[0-9]*$/) ||
-      userDetails.phonenumber.length != 10
+            userDetails.phonenumber.length != 10
         ) {
             seterror({
                 error: true,
@@ -78,16 +81,15 @@ function Form() {
                 phonenumber: userDetails.countrycode + userDetails.phonenumber,
             })
                 .then(() => {
-                    onSigninssubmit(userDetails.countrycode, userDetails.phonenumber)
+                    onSigninssubmit(
+                        userDetails.countrycode,
+                        userDetails.phonenumber
+                    )
                         .then(() => {
                             setIsfilled(true)
                         })
                         .catch((err) => {
                             alert(err)
-                            seterror({
-                                error: true,
-                                helperText: err,
-                            })
                         })
                 })
                 .catch(() => {
@@ -137,7 +139,10 @@ function Form() {
                 >
                     {[
                         Flag.map((option) => (
-                            <MenuItem key={option.dial_code} value={option.dial_code}>
+                            <MenuItem
+                                key={option.dial_code}
+                                value={option.dial_code}
+                            >
                                 <Stack direction={'row'} spacing={2}>
                                     <img
                                         src={`/asset/png/${option.code}.png`}
@@ -173,7 +178,7 @@ function Form() {
                         onClick={handlesubmit}
                         variant="contained"
                     >
-            continue
+                        continue
                     </Button>
                 </ThemeProvider>
                 <Divider>or</Divider>

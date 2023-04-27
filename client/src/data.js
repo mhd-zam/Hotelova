@@ -1,4 +1,4 @@
-const  Flag = [
+const Flag = [
     { name: 'Afghanistan', dial_code: '+93', code: 'AF', flag: '🇦🇫' },
     { name: 'Albania', dial_code: '+355', code: 'AL', flag: '🇦🇱' },
     { name: 'Algeria', dial_code: '+213', code: 'DZ', flag: '🇩🇿' },
@@ -9,6 +9,13 @@ const  Flag = [
     { name: 'Antarctica', dial_code: '+672', code: 'AQ', flag: '🇦🇶' },
     { name: 'Antigua and Barbuda', dial_code: '+1268', code: 'AG', flag: '🇦🇬' },
     { name: 'Argentina', dial_code: '+54', code: 'AR', flag: '🇦🇷' },
-    { name: 'India', dial_code: '+91', code: 'IN', preferred: true, flag: '🇮🇳' }]
+    {
+        name: 'India',
+        dial_code: '+91',
+        code: 'IN',
+        preferred: true,
+        flag: '🇮🇳',
+    },
+]
 
 export default Flag

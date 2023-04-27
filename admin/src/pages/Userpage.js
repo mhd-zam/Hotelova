@@ -45,9 +45,6 @@ function Userpage() {
     setPageNum(p)
   }
 
-  
-
-
   return (
     <div>
       <BasicTable heading={heading} data={useList} title={'user List'} callback={onChange} />

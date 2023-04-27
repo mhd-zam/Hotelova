@@ -6,7 +6,7 @@ export default function BasicTextFields({
     callback,
     state,
     error,
-    defaultvalue
+    defaultvalue,
 }) {
     return (
         <TextField

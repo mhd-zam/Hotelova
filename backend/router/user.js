@@ -1,63 +1,107 @@
-const express = require('express')
-const router = express.Router()
-const upload = require('../controller/multer')
-require('dotenv').config()
-const stripe = require('stripe')(process.env.STRIPE_KEY)
+const express = require("express");
+const router = express.Router();
+const upload = require("../controller/multer");
+require("dotenv").config();
 
+const {
+  otplogin,
+  enteruserdetails,
+  gmailAuth,
+  userlogout,
+  checkisblocked,
+  checkhoststatus,
+  hostverify,
+  hostDetails,
+  managewishlist,
+  removeFromWishlist,
+  getWishlist,
+  getWallet,
+} = require("../controller/userhelper");
+const {
+  addproperty,
+  getAllproperty,
+  EditProperty,
+  removeProperty,
+  getAmenities,
+  getRoomType,
+  searchProperty,
+} = require("../controller/property");
+const { verifyJWT } = require("../controller/jwt/jwtVerify");
+const {
+  CreateCheckout,
+  PlaceOrder,
+  getOrders,
+  Cancelbooking,
+  getReservation,
+  approveReservation,
+} = require("../controller/CheckoutHelper");
+const {
+  addConversation,
+  getAllConversation,
+  addMessages,
+  getMessages,
+} = require("../controller/Chathelper");
 
-const { otplogin, enteruserdetails, gmailAuth, userlogout, checkisblocked, checkhoststatus, hostverify, hostDetails } = require('../controller/userhelper');
-const { addproperty, getAllproperty, EditProperty, removeProperty, getAmenities, getRoomType } = require('../controller/property');
-const { verifyJWT } = require('../controller/jwt/jwtVerify');
+router.post("/otplogin", otplogin);
 
-router.post('/otplogin', otplogin)
+router.post("/userdetails", enteruserdetails);
 
-router.post('/userdetails', enteruserdetails)
+router.post("/gmaillogin", gmailAuth);
 
-router.post('/gmaillogin', gmailAuth)
+router.post("/check", checkisblocked);
 
-router.post('/check', checkisblocked)
+router.post("/logout", userlogout);
 
-router.post('/logout', userlogout)
+router.post("/addproperty", verifyJWT, upload.array("images"), addproperty);
 
-router.post('/addproperty', verifyJWT, upload.array('images'), addproperty)
+router.post("/become-a-host", verifyJWT, hostverify);
 
-router.post('/become-a-host', verifyJWT, hostverify)
+router.post("/is-a-host", verifyJWT, checkhoststatus);
 
-router.post('/is-a-host', verifyJWT, checkhoststatus)
+router.get("/viewAllProperty", getAllproperty);
 
-router.get('/viewAllProperty', getAllproperty)
+router.put("/editProperty", verifyJWT, upload.array("images"), EditProperty);
 
-router.put('/editProperty',verifyJWT, upload.array('images'),EditProperty)
+router.delete("/removeProperty/:id", removeProperty);
 
-router.delete('/removeProperty/:id', removeProperty)
+router.post("/hostdetails", verifyJWT, hostDetails);
 
-router.post('/hostdetails', verifyJWT, hostDetails)
+router.get("/getAllAmenities", getAmenities);
 
-router.get('/getAllAmenities', getAmenities)
+router.get("/getRoomType", getRoomType);
 
-router.get('/getRoomType', getRoomType)
+router.post("/create-checkout-session", CreateCheckout);
 
+router.post("/placeorder", PlaceOrder);
 
-router.post('/create-checkout-session', async (req, res) => {
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'T-shirt',
-            },
-            unit_amount: 2000,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: 'http://localhost:4242/success',
-      cancel_url: 'http://localhost:4242/cancel',
-    })
+router.get("/viewOrders/:userid", getOrders);
 
-    res.send({url:session.url})
-  });
+router.patch("/Cancelbooking/:orderid", Cancelbooking);
 
-module.exports= router
+router.get("/viewReservation/:hostid", getReservation);
+
+router.post("/ApproveReservation/:orderid", approveReservation);
+
+router.post("/RejectReservation/:orderid", Cancelbooking);
+
+router.get("/searchProperty", searchProperty);
+
+router.post("/addconversation", addConversation);
+
+router.get("/getConversation/:userid", getAllConversation);
+
+router.post("/addmessages", addMessages);
+
+router.get("/getMessages/:conversationid", getMessages);
+
+router.post("/addtowishlist", managewishlist);
+
+router.post("/removeWishlist/:userid/:wishlistid", removeFromWishlist);
+
+router.get("/getWishlist/:userid", getWishlist);
+
+router.get("/getWallet/:userid", getWallet)
+
+router.get('/getPropertyType',getRoomType)
+
+module.exports = router;

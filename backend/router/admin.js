@@ -1,14 +1,15 @@
 const express = require('express')
-const { userlist, blockunblock, login, hostRequestuser, approvehost } = require('../controller/adminhelper')
+const { userlist, blockunblock, login, hostRequestuser, approvehost, getBookings, getDashboardData } = require('../controller/adminhelper')
 const { getAllproperty, removeProperty, addRoomType, getRoomType, removeRoomType, editRoomType, addAmenties, getAmenities, removeAmenities, editAmenties } = require('../controller/property')
 const router = express.Router()
 const upload = require('../controller/multer')
 const { verifyJWTAdmin } = require('../controller/jwt/jwtVerifyAdmin')
+const { Cancelbooking } = require('../controller/CheckoutHelper')
 
 
 router.post('/login',login)
 
-router.get('/getAllUsers',userlist)
+router.get('/getAllUsers', userlist)
 
 router.patch('/blockOrUnblock/:id',blockunblock)
 
@@ -34,5 +35,13 @@ router.get('/getAllAmenities', getAmenities)
 
 router.delete('/removeAmenities/:id', removeAmenities)
 
-router.put('/editAminities', upload.single('images'),editAmenties)
+router.put('/editAminities', upload.single('images'), editAmenties)
+    
+router.get('/getAllBookings', getBookings)
+
+router.post('/cancelBooking/:orderid', Cancelbooking)
+
+
+router.get('/getAllDashboard',getDashboardData)
+    
 module.exports=router

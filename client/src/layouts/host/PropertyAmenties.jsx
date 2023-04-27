@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { red } from '@mui/material/colors'
 import {
     Card,
@@ -15,20 +15,21 @@ import { getAmenities } from '../../api/api'
 
 function PropertyAmenties() {
     const { control } = useFormContext()
-    const [amenities,setAmenities]=useState([])
+    const [amenities, setAmenities] = useState([])
     useEffect(() => {
-        getAmenities().then(({data}) => {
-            setAmenities(data)
-        }).catch((err) => {
-            alert(err)
-        })
-    },[])
+        getAmenities()
+            .then(({ data }) => {
+                setAmenities(data)
+            })
+            .catch((err) => {
+                alert(err)
+            })
+    }, [])
 
-   
     return (
         <Box component={'div'} minHeight={'50vh'}>
             <Typography variant="h4" m={2} maxWidth={450} ml={5}>
-        Add amenities available at your place.
+                Add amenities available at your place.
             </Typography>
 
             <Stack direction={'row'} pl={5} spacing={1}>
@@ -78,7 +79,11 @@ function PropertyAmenties() {
                                         </Box>
                                     </Box>
 
-                                    <Typography variant="body2" fontWeight={600} padding={2}>
+                                    <Typography
+                                        variant="body2"
+                                        fontWeight={600}
+                                        padding={2}
+                                    >
                                         {item.ProductName}
                                     </Typography>
                                 </Stack>

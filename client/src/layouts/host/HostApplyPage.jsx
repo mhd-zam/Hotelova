@@ -46,7 +46,8 @@ export default function HostApplyPage() {
                 <Box alignItems={'center'} justifyContent={'center'}>
                     <Typography variant="h4">successfully submited</Typography>
                     <Typography variant="h6">
-                    The request to become host will be approved after verification
+                        The request to become host will be approved after
+                        verification
                     </Typography>
                     <BtnComponent
                         variant={'contained'}
@@ -64,10 +65,15 @@ export default function HostApplyPage() {
                                 control={control}
                                 rules={{ required: true, pattern: /[^\s\\]/ }}
                                 render={({ field }) => (
-                                    <InputText placeholder={'fullName'} {...field} />
+                                    <InputText
+                                        placeholder={'fullName'}
+                                        {...field}
+                                    />
                                 )}
                             />
-                            {errors.FullName && <span>FullName is required</span>}
+                            {errors.FullName && (
+                                <span>FullName is required</span>
+                            )}
                             <Box sx={{ marginTop: '10px' }} />
                             <label>DateOfBirth</label>
                             <Controller
@@ -82,7 +88,9 @@ export default function HostApplyPage() {
                                     />
                                 )}
                             />
-                            {errors.DateOfBirth && <span>DateOfBirth is required</span>}
+                            {errors.DateOfBirth && (
+                                <span>DateOfBirth is required</span>
+                            )}
                             <Box sx={{ marginTop: '10px' }} />
                             <label>AadharNumber</label>
                             <Controller
@@ -90,10 +98,15 @@ export default function HostApplyPage() {
                                 control={control}
                                 rules={{ required: true, pattern: /[^\s\\]/ }}
                                 render={({ field }) => (
-                                    <InputText placeholder={'AadharNumber'} {...field} />
+                                    <InputText
+                                        placeholder={'AadharNumber'}
+                                        {...field}
+                                    />
                                 )}
                             />
-                            {errors.AadharNumber && <span>AadharNumber is required</span>}
+                            {errors.AadharNumber && (
+                                <span>AadharNumber is required</span>
+                            )}
                             <Box sx={{ marginTop: '10px' }} />
                             <label>PanCard</label>
                             <Controller
@@ -101,7 +114,10 @@ export default function HostApplyPage() {
                                 control={control}
                                 rules={{ required: true, pattern: /[^\s\\]/ }}
                                 render={({ field }) => (
-                                    <InputText placeholder={'PanCard'} {...field} />
+                                    <InputText
+                                        placeholder={'PanCard'}
+                                        {...field}
+                                    />
                                 )}
                             />
                             {errors.PanCard && <span>PanCard is required</span>}
@@ -112,7 +128,10 @@ export default function HostApplyPage() {
                                 control={control}
                                 rules={{ required: true, pattern: /[^\s\\]/ }}
                                 render={({ field }) => (
-                                    <InputText placeholder={'Address'} {...field} />
+                                    <InputText
+                                        placeholder={'Address'}
+                                        {...field}
+                                    />
                                 )}
                             />
                             {errors.Address && <span>Address is required</span>}
@@ -123,7 +142,10 @@ export default function HostApplyPage() {
                                 control={control}
                                 rules={{ required: true, pattern: /[^\s\\]/ }}
                                 render={({ field }) => (
-                                    <InputText placeholder={'Rental License Number'} {...field} />
+                                    <InputText
+                                        placeholder={'Rental License Number'}
+                                        {...field}
+                                    />
                                 )}
                             />
                             {errors.RentalLicensePermit && (

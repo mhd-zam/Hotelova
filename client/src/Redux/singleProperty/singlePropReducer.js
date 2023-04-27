@@ -1,16 +1,16 @@
 import { Add_SingleProp } from './singlePropType'
 
-
 const initialstate = {
-    SingleProperty:{}
+    SingleProperty: {},
 }
 
-export default function singlePropReducer(state=initialstate,action) {
+export default function singlePropReducer(state = initialstate, action) {
     switch (action.type) {
-    case Add_SingleProp: return {
-        ...state,
-        SingleProperty:action.payload
-    }
-    default:return null
+        case Add_SingleProp:
+            return {
+                SingleProperty: action.payload,
+            }
+        default:
+            return state
     }
 }

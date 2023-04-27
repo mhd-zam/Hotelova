@@ -3,6 +3,7 @@ const formDataToObject = require("form-data-to-object");
 const RoomTypeCollection = require("../model/RoomtypeCollection");
 const aminitiesCollection = require("../model/aminitiesCollection");
 const propertyCollection = require("../model/propertyCollection");
+const userCollection = require("../model/userCollection");
 
 module.exports = {
   addproperty: async (req, res) => {
@@ -22,6 +23,10 @@ module.exports = {
 
     parsedFormData["Price"] = parseInt(value);
 
+    let max = parsedFormData["Maxguest"];
+
+    parsedFormData["Maxguest"] = parseInt(max);
+
     for (let key in parsedFormData.Amenties) {
       let value = parsedFormData.Amenties[key];
       if (value === "true") {
@@ -35,8 +40,6 @@ module.exports = {
     parsedFormData["images"] = img;
 
     let result = await property.create(parsedFormData);
-
-    console.log(result);
 
     res.status(200).send({ img: req.files });
   },
@@ -55,6 +58,10 @@ module.exports = {
     let value = parsedFormData["Price"];
     parsedFormData["Price"] = parseInt(value);
 
+    let max = parsedFormData["Maxguest"];
+
+    parsedFormData["Maxguest"] = parseInt(max);
+
     for (let key in parsedFormData.Amenties) {
       let value = parsedFormData.Amenties[key];
       if (value === "true") {
@@ -63,7 +70,6 @@ module.exports = {
         parsedFormData.Amenties[key] = false;
       }
     }
-    console.log(parsedFormData);
 
     if (req.files) {
       let img = req.files.map((item) => item.location);
@@ -75,8 +81,6 @@ module.exports = {
       });
     }
 
-    console.log(parsedFormData["images"]);
-
     await propertyCollection.replaceOne(
       { _id: req.body.Proid },
       parsedFormData
@@ -86,31 +90,34 @@ module.exports = {
   },
 
   getAllproperty: async (req, res) => {
+    let limit = parseInt(req.query.limit)
+    let page = parseInt(req.query.page)
+
+    let skip = page * limit;
+    let count = await propertyCollection.count()
     try {
-      let Property = await property.aggregate(
-        [
-          { $match: {} },
+      let Property = await property.aggregate([
+        { $match: {} },
         {
           $lookup: {
             from: "hostdetails",
-            localField: "userid",
+            localField: "hostid",
             foreignField: "userid",
             as: "host",
-          }
           },
-          {
-            $addFields: {
-          host:{$arrayElemAt:['$host',0]}
-        }}
-        ]
-      )
-
-      console.log(Property);
-      
-
-      res.status(200).json(Property);
+        },
+        {
+          $addFields: {
+            host: { $arrayElemAt: ["$host", 0] },
+            wishlist: false,
+          },
+        },
+        { $skip: skip },
+        { $limit: limit },
+      ])
+      res.status(200).json(Property)
     } catch (err) {
-      console.log(err);
+      res.status(500).send(err);
     }
   },
   removeProperty: async (req, res) => {
@@ -118,7 +125,7 @@ module.exports = {
       await property.deleteOne({ _id: req.params.id });
       res.sendStatus(200);
     } catch (err) {
-      console.log(err);
+      res.status(500).send(err);
     }
   },
 
@@ -135,7 +142,6 @@ module.exports = {
   getRoomType: async (req, res) => {
     try {
       let RoomType = await RoomTypeCollection.find({});
-      console.log(RoomType);
       res.status(200).json(RoomType);
     } catch (err) {}
   },
@@ -144,12 +150,11 @@ module.exports = {
       await RoomTypeCollection.deleteOne({ _id: req.params.id });
       res.sendStatus(200);
     } catch (err) {
-      console.log(err);
+      res.status(500).send(err);
     }
   },
   editRoomType: async (req, res) => {
     try {
-      console.log(req.body);
       let result = await RoomTypeCollection.findOne({ _id: req.body._id });
       if (result) {
         if (req.file) {
@@ -165,7 +170,7 @@ module.exports = {
       }
       throw new Error();
     } catch (err) {
-      console.log(err);
+      res.status(500).send(err);
     }
   },
   addAmenties: async (req, res) => {
@@ -210,6 +215,20 @@ module.exports = {
       throw new Error();
     } catch (err) {
       res.status(403).send(err);
+    }
+  },
+  searchProperty: async (req, res) => {
+    const destination = req.query.destination;
+    const startdate = req.query.checkin;
+    const endDate = req.query.checkout;
+    try {
+      let result = await propertyCollection.aggregate([
+        { $match: { $text: { $search: destination, $caseSensitive: false } } },
+        { $match: { NotAvailable: { $nin: [startdate, endDate] } } },
+      ]);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(200).send(err);
     }
   },
 };

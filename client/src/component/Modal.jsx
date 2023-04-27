@@ -39,7 +39,10 @@ export default function CustomizedDialogs(props) {
                 open={open}
             >
                 {' '}
-                <DialogTitle style={{ textAlign: 'center' }} sx={{ m: 0, p: 2 }}>
+                <DialogTitle
+                    style={{ textAlign: 'center' }}
+                    sx={{ m: 0, p: 2 }}
+                >
                     {title}
                     {modaloffbtn ? null : (
                         <IconButton

@@ -13,15 +13,15 @@ export function blockOrUnblock(data) {
 }
 
 export function getAllhostrequest() {
-  return Axios.get("/getAllHostRequest");
+  return Axios.get('/getAllHostRequest');
 }
 
 export function changeHostStatus(id) {
   return Axios.patch(`/approveHost/${id}`);
 }
 
-export function getallproduct() {
-  return Axios.get("/getAllproperty");
+export function getallproduct(limit,page) {
+  return Axios.get(`/getAllproperty?limit=${limit}&page=${page}`);
 }
 
 export function removeProperty(id) {
@@ -80,4 +80,16 @@ export function editAminities(data,id) {
   let file = data.images
   formdata.append('images', file[0])
   return Axios.put('/editAminities',formdata,{headers:{'Content-Type':'multipart/form-data'}})
+}
+
+
+export function allbooking() {
+  return Axios.get('/getAllBookings')
+}
+
+export function cancelBooking(orderid) {
+  return Axios.post(`/cancelBooking/${orderid}`)
+}
+export function getDashboardData() {
+  return Axios.get('/getAllDashboard')
 }

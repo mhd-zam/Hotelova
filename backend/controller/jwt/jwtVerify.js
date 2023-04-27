@@ -5,8 +5,6 @@ require('dotenv').config();
 const  verifyJWT = async(req, res, next) => {
   
     const auth = req.cookies;
-    console.log(auth)
-    console.log('reached')
     if (!auth.Ent) {
         return   res.sendStatus(401)
     } 
@@ -16,7 +14,6 @@ const  verifyJWT = async(req, res, next) => {
         res.clearCookie('Ent', { httpOnly: true })
         return   res.sendStatus(401)
     }
-    console.log(token);
     jwt.verify(
         token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {

@@ -4,15 +4,12 @@ import { senduserdetails } from '../../api/api'
 import BasicTextFields from '../../component/BasicTextFields'
 import BtnComponent from '../../component/BtnComponent'
 import { ExternalContext } from '../../context/CustomContext'
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setCheckUser } from '../../Redux/user/userAction'
 function Enterusername() {
-    const {
-        setOpenlogin,
-        setOpen,
-    } = useContext(ExternalContext)
-    const userDetails = useSelector(state => state.user.userDetails)
-    const dispatch=useDispatch()
+    const { setOpenlogin, setOpen } = useContext(ExternalContext)
+    const userDetails = useSelector((state) => state.user.userDetails)
+    const dispatch = useDispatch()
     const [details, Setdetails] = useState({})
     const [error, seterror] = useState({ error: false, helperText: '' })
     const [fillerror, setfillerror] = useState(false)
@@ -33,13 +30,15 @@ function Enterusername() {
             setfillerror(true)
         } else if (
             name == 'phonenumber' &&
-      (!details.phonenumber.match(/^[0-9]*$/) ||
-        details.phonenumber.length != 10)
+            (!details.phonenumber.match(/^[0-9]*$/) ||
+                details.phonenumber.length != 10)
         ) {
             seterror({ error: true, helperText: 'invalid phonenumber' })
         } else if (
             name == 'email' &&
-      !details.email.trim().match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+            !details.email
+                .trim()
+                .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
         ) {
             seterror({ error: true, helperText: 'invalid email' })
         } else {
@@ -57,10 +56,14 @@ function Enterusername() {
 
     return (
         <div>
-            <Stack direction={'column'} spacing={2} >
+            <Stack direction={'column'} spacing={2}>
                 {fillerror && (
-                    <Typography variant="body1" color={'red'} textAlign="center">
-            please fill the form
+                    <Typography
+                        variant="body1"
+                        color={'red'}
+                        textAlign="center"
+                    >
+                        please fill the form
                     </Typography>
                 )}
                 <BasicTextFields

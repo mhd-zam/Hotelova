@@ -25,7 +25,6 @@ import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
 import ApprovalIcon from "@mui/icons-material/Approval";
 import CategoryIcon from "@mui/icons-material/Category";
 import TvIcon from "@mui/icons-material/Tv";
-import SettingsIcon from "@mui/icons-material/Settings";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Menu } from "@mui/material";
 import { Globalcontext } from "../context/Externalcontext";
@@ -232,30 +231,6 @@ export default function MiniDrawer({ children }) {
         ))}
         <Divider />
         <List>
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  color: "white",
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={"Settings"}
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
-          </ListItem>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

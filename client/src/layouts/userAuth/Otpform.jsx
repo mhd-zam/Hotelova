@@ -1,4 +1,4 @@
-import { Box, Stack,Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import React, { useContext, useState, useEffect } from 'react'
 import BtnComponent from '../../component/BtnComponent'
 import { ExternalContext } from '../../context/CustomContext'
@@ -10,14 +10,9 @@ import { setCheckUser, setUserDetails } from '../../Redux/user/userAction'
 const Otpform = () => {
     const [otp, setOtp] = React.useState('')
     const [counter, setCounter] = useState(60)
-    const {
-        setOpen,
-        setAlert,
-        setOpenlogin,
-        userDetails,
-        setIsfilled,
-    } = useContext(ExternalContext)
-    const dispatch=useDispatch()
+    const { setOpen, setAlert, setOpenlogin, userDetails, setIsfilled } =
+        useContext(ExternalContext)
+    const dispatch = useDispatch()
     const [error, seterror] = useState({ error: false, helperText: '' })
     const handleChange = (e) => {
         setOtp(e.target.value)
@@ -36,10 +31,10 @@ const Otpform = () => {
 
     useEffect(() => {
         let timer =
-      counter > 0 &&
-      setInterval(() => {
-          setCounter(counter - 1)
-      }, 1000)
+            counter > 0 &&
+            setInterval(() => {
+                setCounter(counter - 1)
+            }, 1000)
         return () => {
             clearInterval(timer)
         }
@@ -54,22 +49,30 @@ const Otpform = () => {
                 sendOtopData(user)
                     .then((response) => {
                         console.log(response)
-                        const {_id, phonenumber, email,accessToken} = response.data
+                        const { _id, phonenumber, email, username } =
+                            response.data
                         if (phonenumber.length != 13 || email.length < 5) {
                             dispatch(setCheckUser(true))
                         }
                         let obj = {
-                            userDetails: { _id, phonenumber, email },
-                            jwttoken: accessToken,
+                            userDetails: { _id, phonenumber, email, username },
                         }
                         dispatch(setUserDetails(obj))
                         setOpenlogin(false)
-                        setAlert({ notify: true, message: 'logged in successfully' })
+                        setAlert({
+                            notify: true,
+                            message: 'logged in successfully',
+                            action: 'success',
+                        })
                         setOpen(false)
                         setIsfilled(false)
                     })
                     .catch(() => {
-                        setAlert({ notify: true, message: 'please try again' })
+                        setAlert({
+                            notify: true,
+                            message: 'please try again',
+                            action: 'error',
+                        })
                     })
             })
             .catch(() => {
@@ -87,7 +90,11 @@ const Otpform = () => {
                 userDetails.countrycode + userDetails.phonenumber
             }`}</Typography>
 
-            <Stack direction={'column'} alignItems="center" justifyContent="center">
+            <Stack
+                direction={'column'}
+                alignItems="center"
+                justifyContent="center"
+            >
                 <InputTextField
                     error={error}
                     id="outlined-error-helper-text"
@@ -110,7 +117,9 @@ const Otpform = () => {
                 )}
 
                 {counter > 0 ? (
-                    <Typography variant="body1">Time remaining:00.{counter}</Typography>
+                    <Typography variant="body1">
+                        Time remaining:00.{counter}
+                    </Typography>
                 ) : (
                     ''
                 )}

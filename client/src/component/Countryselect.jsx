@@ -2,9 +2,9 @@ import React from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import Flag from '../data'
 import TextField from '@mui/material/TextField'
-import { Stack,Box } from '@mui/system'
+import { Stack, Box } from '@mui/system'
 
-function Countryselect({callback,fieldname}) {
+function Countryselect({ callback, fieldname }) {
     return (
         <Box
             component="form"
@@ -13,7 +13,9 @@ function Countryselect({callback,fieldname}) {
             }}
             noValidate
             autoComplete="off"
-        > <TextField
+        >
+            {' '}
+            <TextField
                 id="outlined-select-currency"
                 select
                 color="success"
@@ -24,7 +26,10 @@ function Countryselect({callback,fieldname}) {
             >
                 {[
                     Flag.map((option) => (
-                        <MenuItem key={option.dial_code} value={option.dial_code}>
+                        <MenuItem
+                            key={option.dial_code}
+                            value={option.dial_code}
+                        >
                             <Stack direction={'row'} spacing={2}>
                                 <img
                                     src={`/asset/png/${option.code}.png`}
@@ -37,7 +42,8 @@ function Countryselect({callback,fieldname}) {
                         </MenuItem>
                     )),
                 ]}
-            </TextField></Box>
+            </TextField>
+        </Box>
     )
 }
 

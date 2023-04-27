@@ -5,7 +5,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { Box } from '@mui/material'
 
 function Swipeble({ children }) {
-    
     const [activeindex, setActiveindex] = useState(0)
     return (
         <React.Fragment>
@@ -13,7 +12,9 @@ function Swipeble({ children }) {
                 {children}
             </SwipeableViews>
             <Box
-                onClick={()=>{setActiveindex((prev)=>prev>0?prev-1:5)}}
+                onClick={() => {
+                    setActiveindex((prev) => (prev > 0 ? prev - 1 : 5))
+                }}
                 component={'div'}
                 sx={{
                     backgroundColor: 'white',
@@ -27,10 +28,12 @@ function Swipeble({ children }) {
                     borderRadius: 10,
                 }}
             >
-                <ArrowBackIosNewIcon  sx={{ fontSize: 15 }} />
+                <ArrowBackIosNewIcon sx={{ fontSize: 15 }} />
             </Box>
             <Box
-                onClick={()=>{setActiveindex((prev)=>prev<5?prev+1:0)}} 
+                onClick={() => {
+                    setActiveindex((prev) => (prev < 5 ? prev + 1 : 0))
+                }}
                 component={'div'}
                 sx={{
                     backgroundColor: 'white',
@@ -44,7 +47,7 @@ function Swipeble({ children }) {
                     borderRadius: 10,
                 }}
             >
-                <ArrowForwardIosIcon  sx={{ fontSize: 15 }} />
+                <ArrowForwardIosIcon sx={{ fontSize: 15 }} />
             </Box>
         </React.Fragment>
     )

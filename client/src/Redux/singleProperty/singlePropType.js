@@ -1,1 +1,1 @@
-export const Add_SingleProp='Add_SingleProp'
+export const Add_SingleProp = 'Add_SingleProp'

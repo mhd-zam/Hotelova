@@ -25,6 +25,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import ErrorHandler from './pages/Errorhandler'
 import Wishlist from './layouts/Wishlist'
 import HomePage from './pages/HomePage'
+import TransactionAuth from './pages/TransactionAuth'
 
 function Router() {
     return (
@@ -68,14 +69,16 @@ function Router() {
                                             element={<ViewReservation />}
                                         />
                                     </Route>
-                                    <Route
-                                        path="/success"
-                                        element={<CheckoutSuccess />}
-                                    />
-                                    <Route
-                                        path="/cancel"
-                                        element={<CancelCheckout />}
-                                    />
+                                    <Route element={<TransactionAuth />}>
+                                        <Route
+                                            path="/success"
+                                            element={<CheckoutSuccess />}
+                                        />
+                                        <Route
+                                            path="/cancel"
+                                            element={<CancelCheckout />}
+                                        />
+                                    </Route>
                                     <Route
                                         path="/Bookings"
                                         element={<ViewBooking />}

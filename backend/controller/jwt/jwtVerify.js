@@ -3,16 +3,17 @@ const user = require("../../model/userCollection");
 require('dotenv').config();
 
 const  verifyJWT = async(req, res, next) => {
-  
     const auth = req.cookies;
     if (!auth.Ent) {
-        return   res.sendStatus(401)
+        res.sendStatus(401)
+        return
     } 
     const token = auth.Ent
     let result = await user.findOne({ accessToken: token }) 
     if (!result) {
         res.clearCookie('Ent', { httpOnly: true })
-        return   res.sendStatus(401)
+        res.sendStatus(401)
+        return
     }
     jwt.verify(
         token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {

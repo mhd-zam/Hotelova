@@ -12,8 +12,7 @@ const http = require("http");
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    origin: "http://localhost:3000"
   },
 });
 require('./listeners/socketManager')(io)
@@ -25,7 +24,7 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000","http://localhost:3001"],
     credentials: true,
   })
 );

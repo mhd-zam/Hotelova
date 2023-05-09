@@ -1,18 +1,30 @@
 import { Box, Typography, Container } from '@mui/material'
-import React, { useContext } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useContext, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import HostPropetyCard from '../component/HostPropertyCard'
 import { ExternalContext } from '../context/CustomContext'
 import { useNavigate } from 'react-router-dom'
-import { deleteProperty } from '../api/api'
-import { RemoveProperties } from '../Redux/properties/propertiesAction'
+import { deleteProperty, getAllHostProperty } from '../api/api'
+import PermissionAlert from '../component/PermissionAlert'
 
 export default function Viewhosted() {
     let userID = useSelector((state) => state.user.userDetails._id)
-    let hostedProperty = useSelector((state) =>
-        state.properties.propertyArray.filter((item) => item.hostid == userID)
-    )
-    const dispatch = useDispatch()
+    const [open, setopen] = React.useState(false)
+    const [hostedProperty, setHostProperty] = useState([])
+    const [id, setid] = React.useState(null)
+    const { setShowErr } = useContext(ExternalContext)
+    useEffect(() => {
+        async function getHostPropertylist() {
+            try {
+                const { data } = await getAllHostProperty(userID)
+                console.log(data)
+                setHostProperty(data)
+            } catch (err) {
+                setShowErr(true)
+            }
+        }
+        getHostPropertylist()
+    }, [])
     const navigate = useNavigate()
     const { setPropertyEdit } = useContext(ExternalContext)
     function editProperty(id) {
@@ -21,13 +33,25 @@ export default function Viewhosted() {
         navigate('/Edit-listed-property')
     }
 
-    function removeProperty(id) {
+    
+    function alertPop(ID) {
+        setid(ID)
+        setopen(true)
+    }
+
+    function removeProperty() {
         deleteProperty(id)
             .then(() => {
-                dispatch(RemoveProperties(id))
+                setHostProperty((prev) =>prev.filter((item) => item._id !== id))
+                setopen(false)
             })
-            .catch((err) => alert(err))
+            .catch(() => setShowErr(true))
     }
+
+    function CancelAction() {
+        setopen(false)
+    }
+
 
     return (
         <Box mt={5}>
@@ -37,8 +61,15 @@ export default function Viewhosted() {
                 </Typography>
                 <HostPropetyCard
                     editProperty={editProperty}
-                    removeProperty={removeProperty}
+                    removeProperty={alertPop}
                     property={hostedProperty}
+                />
+                <PermissionAlert
+                    open={open}
+                    content={'Do you want to delete the property?'}
+                    title={'Remove Property'}
+                    Agreecallback={removeProperty}
+                    Cancelcallback={CancelAction}
                 />
             </Container>
         </Box>

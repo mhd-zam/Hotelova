@@ -15,7 +15,7 @@ const PropertyModel = new mongoose.Schema({
         RoomType: String,
         Facility: {},
         Amenties: {},
-        NotAvailable:{type:Array,default:[]},
+        comments:[],
         images: [{type:String}],
     
 })

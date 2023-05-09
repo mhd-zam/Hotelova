@@ -28,7 +28,7 @@ import TvIcon from "@mui/icons-material/Tv";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Menu } from "@mui/material";
 import { Globalcontext } from "../context/Externalcontext";
-import { Link } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -97,7 +97,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 let array = [
-  { name: "Dashbord", icon: <DashboardIcon /> },
+  { name: "Dashboard", icon: <DashboardIcon /> },
   { name: "Users", icon: <GroupIcon /> },
   { name: "Hosting-Request", icon: <ApprovalIcon /> },
   { name: "Bookings", icon: <AutoStoriesIcon /> },
@@ -111,7 +111,18 @@ export default function MiniDrawer({ children }) {
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const {setadminLogged}=useContext(Globalcontext)
-  const Open=Boolean(anchorEl)
+  const Open = Boolean(anchorEl)
+  const basicStyle = {
+    fontWeight: 'bold',
+    color: 'white',
+    textDecoration:'none'
+  };
+
+  const activeStyle = {
+    fontWeight: 'bold',
+    color: 'green',
+    textDecoration:'none'
+  }
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -201,7 +212,7 @@ export default function MiniDrawer({ children }) {
         <Divider />
         {array.map((elemt) => (
           <List>
-            <Link to={`/${elemt.name}`} >
+            <NavLink style={window.location.pathname===`/Admin/${elemt.name}`?activeStyle:basicStyle} to={`/${elemt.name}`} >
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
@@ -215,7 +226,7 @@ export default function MiniDrawer({ children }) {
                     color: "white",
                     minWidth: 0,
                     mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                      justifyContent: "center"
                   }}
                 >
                   {elemt.icon}
@@ -226,7 +237,7 @@ export default function MiniDrawer({ children }) {
                 />
               </ListItemButton>
               </ListItem>
-              </Link>
+              </NavLink>
           </List>
         ))}
         <Divider />

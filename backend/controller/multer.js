@@ -24,7 +24,13 @@ const s3 = new S3Client({
  
 })
 
-const uploads3=multer({
+const uploads3 = multer({
+  fileFilter: function(req, file, cb) {
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Only image files are allowed!'));
+    }
+    cb(null, true);
+  },
   storage: multerS3({
     s3: s3,
     bucket: 'hotelova',
@@ -37,4 +43,4 @@ const uploads3=multer({
   })
 })
 
-module.exports=uploads3
+module.exports={uploads3,s3}

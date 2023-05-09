@@ -4,7 +4,7 @@ import { Outlet, Navigate } from 'react-router-dom'
 
 function UserAuth() {
     let logged = useSelector((state) => state.user.isLoggedin)
-    return logged ? <Outlet/> : <Navigate to="/" />
+    return logged ? <Outlet /> : <Navigate to="/" />
 }
 
 export default UserAuth

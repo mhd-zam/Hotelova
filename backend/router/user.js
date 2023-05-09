@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../controller/multer");
+const app = express();
+const {uploads3} = require("../controller/multer");
 require("dotenv").config();
 
 const {
@@ -25,6 +26,8 @@ const {
   getAmenities,
   getRoomType,
   searchProperty,
+  findRoomAvailability,
+  gethostlistedProperty,
 } = require("../controller/property");
 const { verifyJWT } = require("../controller/jwt/jwtVerify");
 const {
@@ -41,30 +44,35 @@ const {
   addMessages,
   getMessages,
 } = require("../controller/Chathelper");
+const { manageComment } = require("../controller/comment");
 
 router.post("/otplogin", otplogin);
-
-router.post("/userdetails", enteruserdetails);
 
 router.post("/gmaillogin", gmailAuth);
 
 router.post("/check", checkisblocked);
 
-router.post("/logout", userlogout);
-
-router.post("/addproperty", verifyJWT, upload.array("images"), addproperty);
-
-router.post("/become-a-host", verifyJWT, hostverify);
-
-router.post("/is-a-host", verifyJWT, checkhoststatus);
+router.get("/searchProperty", searchProperty);
 
 router.get("/viewAllProperty", getAllproperty);
 
-router.put("/editProperty", verifyJWT, upload.array("images"), EditProperty);
+app.use(verifyJWT)
+
+router.post("/logout", userlogout);
+
+router.post("/userdetails", enteruserdetails);
+
+router.post("/addproperty", uploads3.array("images"), addproperty);
+
+router.post("/become-a-host", hostverify);
+
+router.post("/is-a-host", checkhoststatus);
+
+router.put("/editProperty", uploads3.array("images"), EditProperty);
 
 router.delete("/removeProperty/:id", removeProperty);
 
-router.post("/hostdetails", verifyJWT, hostDetails);
+router.post("/hostdetails", hostDetails);
 
 router.get("/getAllAmenities", getAmenities);
 
@@ -84,8 +92,6 @@ router.post("/ApproveReservation/:orderid", approveReservation);
 
 router.post("/RejectReservation/:orderid", Cancelbooking);
 
-router.get("/searchProperty", searchProperty);
-
 router.post("/addconversation", addConversation);
 
 router.get("/getConversation/:userid", getAllConversation);
@@ -100,8 +106,14 @@ router.post("/removeWishlist/:userid/:wishlistid", removeFromWishlist);
 
 router.get("/getWishlist/:userid", getWishlist);
 
-router.get("/getWallet/:userid", getWallet)
+router.get("/getWallet/:userid", getWallet);
 
-router.get('/getPropertyType',getRoomType)
+router.get("/getPropertyType", getRoomType);
+
+router.post("/checkRoomAvailability", findRoomAvailability);
+
+router.post("/addComment", manageComment)
+
+router.get('/getHostProperty',gethostlistedProperty)
 
 module.exports = router;

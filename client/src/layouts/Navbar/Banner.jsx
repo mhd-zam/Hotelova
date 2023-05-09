@@ -37,7 +37,6 @@ function Banner() {
             const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${inputValue}.json?access_token=pk.eyJ1IjoibWhkemFtIiwiYSI6ImNsZnRuOWVlczAyaTIzc25yNm96a3ltenoifQ.MfJmNXS8SqvbICe301UesA&autocomplete=true`
             const response = await fetch(endpoint)
             const results = await response.json()
-            console.log(results)
             setSuggestions(results?.features)
         } catch (error) {
             console.log('Error fetching data, ', error)
@@ -100,7 +99,6 @@ function Banner() {
                     <Box mt={1}>
                         <Box sx={{ minWidth: '370px', width: '100%' }}>
                             <Autocomplete
-                                freeSolo
                                 id="free-solo-2-demo"
                                 options={suggestions}
                                 inputValue={inputValue}

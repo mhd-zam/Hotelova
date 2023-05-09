@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import LinearStepper from '../layouts/host/LinearStepper'
 import { CssBaseline, Container, Paper, Box } from '@mui/material'
+import { ExternalContext } from '../context/CustomContext'
+import Somethingwentwrong from './Somethingwentwrong'
 
 function Hostproperty() {
     const defaultData = {
@@ -22,8 +24,11 @@ function Hostproperty() {
         Amenties: {},
         images: [],
     }
+    const { ShowErr } = useContext(ExternalContext)
     const isEdit = false
-    return (
+    return ShowErr ? (
+        <Somethingwentwrong />
+    ) : (
         <>
             <CssBaseline />
             <Container maxWidth="lg" sx={{ paddingTop: 5 }}>

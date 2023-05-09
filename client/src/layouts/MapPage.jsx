@@ -31,8 +31,8 @@ function MapPage({ property }) {
             {property?.map((item, index) => (
                 <Box key={index}>
                     <Marker
-                        longitude={item.coordinates.log}
-                        latitude={item.coordinates.lat}
+                        longitude={item.coordinates?.log}
+                        latitude={item.coordinates?.lat}
                         style={{ cursor: 'pointer' }}
                     >
                         <Box

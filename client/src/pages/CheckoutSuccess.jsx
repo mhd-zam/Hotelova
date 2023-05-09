@@ -5,10 +5,13 @@ import { Player } from '@lottiefiles/react-lottie-player'
 import { Box, Typography } from '@mui/material'
 import { verifyOrder } from '../api/api'
 import { useNavigate } from 'react-router-dom'
+import { TransactionClose } from '../Redux/Checkout/CheckoutAction'
+import { useDispatch } from 'react-redux'
 
 function CheckoutSuccess() {
     let player = useRef(null)
     let navigate = useNavigate()
+    const dispatch = useDispatch()
     const [state, setState] = React.useState(false)
     useEffect(() => {
         verifyOrder()
@@ -18,6 +21,9 @@ function CheckoutSuccess() {
             .catch(() => {
                 navigate('/cancel')
             })
+        return () => {
+            dispatch(TransactionClose())
+        }
     }, [])
 
     return (

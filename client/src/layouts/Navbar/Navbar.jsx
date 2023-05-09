@@ -61,16 +61,6 @@ function Navbar() {
 
     return (
         <>
-            <Box
-                height={50}
-                sx={{
-                    backgroundImage:
-                        'url("https://images.unsplash.com/photo-1614849286711-8d732eca224e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE3fHx8ZW58MHx8fHw%3D&w=1000&q=80")',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'repeat-x',
-                }}
-            />
             <Box sx={{ position: 'sticky', top: 0, zIndex: 5 }}>
                 <Container maxWidth="xl" sx={{ width: '98%' }}>
                     <AppBar

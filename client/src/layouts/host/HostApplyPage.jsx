@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import InputText from '../../component/ReusebleTextField'
 import { Box, Paper, Typography } from '@mui/material'
@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { hostRoute, sendHostDetails } from '../../api/api'
 import { useNavigate } from 'react-router-dom'
 import { hostRequest } from '../../Redux/user/userAction'
+import { ExternalContext } from '../../context/CustomContext'
 export default function HostApplyPage() {
     const {
         handleSubmit,
@@ -14,6 +15,7 @@ export default function HostApplyPage() {
         formState: { errors },
     } = useForm()
     const applied = useSelector((state) => state.user.hostApplied)
+    const { setShowErr } = useContext(ExternalContext)
     const dispatch = useDispatch()
     let userid = useSelector((state) => state.user.userDetails._id)
     function Submit(data) {
@@ -23,8 +25,8 @@ export default function HostApplyPage() {
                     dispatch(hostRequest())
                 })
             })
-            .catch((err) => {
-                alert(err)
+            .catch(() => {
+                setShowErr(true)
             })
     }
 

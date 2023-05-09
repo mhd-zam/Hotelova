@@ -4,6 +4,7 @@ import userReducer from './user/userReducer'
 import singlePropReducer from './singleProperty/singlePropReducer'
 import searchReducer from './search/searchReducer'
 import wishlistReducer from './wishlist/wishlistReducer'
+import checkoutReducer from './Checkout/CheckoutReducer'
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     SingleProp: singlePropReducer,
     search: searchReducer,
     wishlist: wishlistReducer,
+    userCheckout: checkoutReducer,
 })
 
 export default rootReducer

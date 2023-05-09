@@ -16,15 +16,7 @@ module.exports = {
           { expiresIn: "2d" }
         );
         await admin.updateOne({ _id: result._id }, { $set: { accessToken } });
-        res.cookie("ANT", accessToken, {
-          httpOnly: true,
-          secure: false,
-          sameSite: "none",
-          maxAge: 2 * 24 * 60 * 60 * 1000,
-          domain: "localhost",
-          path: "/admin",
-        });
-        res.sendStatus(200);
+        res.status(200).send({token:accessToken})
         return;
       }
     } catch (err) {

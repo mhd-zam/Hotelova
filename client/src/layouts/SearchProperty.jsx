@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Box, Container, Typography, Grid, useMediaQuery } from '@mui/material'
+import { Box, Container, Grid, useMediaQuery, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPropertyType, postwishlist, searchProperty } from '../api/api'
 import ProductCard1 from '../component/ProductCard1'
@@ -13,8 +13,10 @@ import {
 import { ExternalContext } from '../context/CustomContext'
 import { useContext } from 'react'
 import FilterBar from './FilterBar'
+import Loading from '../pages/Loading'
 function SearchProperty() {
     const naviagate = useNavigate()
+    const { setShowErr } = useContext(ExternalContext)
     const destination = useSelector((state) => state.search.destination)
     const checkin = useSelector((state) => state.search.checkin)
     const checkout = useSelector((state) => state.search.checkout)
@@ -26,56 +28,51 @@ function SearchProperty() {
     const { setOpenlogin } = useContext(ExternalContext)
     const [propertType, setPropertyType] = useState([])
     const [categoryFiter, setCategoryFilter] = useState('All')
-    const [filterPropery, setFilteredProperty] = useState([])
     const [min, setMin] = useState(0)
-    const [max, setMax] = useState(0)
+    const [max, setMax] = useState(Number.MAX_SAFE_INTEGER)
     const [MAXIMUM, setMAXIMUM] = useState(0)
     const [MINIMUM, setMINIMUM] = useState(0)
     const matches = useMediaQuery('(min-width:800px)')
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
+        setLoading(true)
         async function getSearchProperty() {
             try {
                 const { data } = await searchProperty(
                     destination,
                     checkin,
-                    checkout
+                    checkout,
+                    categoryFiter,
+                    min,
+                    max
                 )
                 wishlist?.forEach((item) => {
-                    let index = data.findIndex((prop) => prop._id === item?._id)
+                    let index = data.result.findIndex(
+                        (prop) => prop._id === item?._id
+                    )
                     if (index != -1) {
-                        data[index].wishlist = true
+                        data.result[index].wishlist = true
                     }
                 })
-                setProperty(data)
-                setFilteredProperty(data)
+                setProperty(data.result)
                 const response = await getPropertyType()
-                const maxValue = data.reduce((acc, item) => {
-                    return Math.max(acc, item.Price)
-                }, 0)
-                const minValue = data.reduce((acc, item) => {
-                    return Math.min(acc, item.Price)
-                }, Number.MAX_SAFE_INTEGER)
-                setMin(minValue)
-                setMax(maxValue)
-                setMAXIMUM(maxValue)
-                setMINIMUM(minValue)
+                setMAXIMUM(data.maxAmt)
+                setMINIMUM(data.minAmt)
                 setPropertyType(response.data.map((item) => item.RoomType))
+                if (data.result) {
+                    setLoading(false)
+                }
             } catch (err) {
-                alert(err)
+                setShowErr(true)
             }
         }
         getSearchProperty()
-    }, [])
+    }, [categoryFiter, min, max])
 
     function handlePrice(e) {
         let value = e.target.value
-        console.log(value)
         setMin(value[0])
         setMax(value[1])
-        const newFilteredProperty = Property.filter(
-            (item) => item.Price >= value[0] && item.Price <= value[1]
-        )
-        setFilteredProperty(newFilteredProperty)
     }
 
     function navigetTosinglepage(id) {
@@ -84,19 +81,8 @@ function SearchProperty() {
         naviagate('/propertyDetail')
     }
 
-    useEffect(() => {
-        if (categoryFiter !== 'All') {
-            const newFilteredProperty = Property.filter(
-                (item) => item.RoomType === categoryFiter
-            )
-            setFilteredProperty(newFilteredProperty)
-        } else {
-            setFilteredProperty(Property)
-        }
-    }, [categoryFiter])
-
     function ProductCard() {
-        const result = filterPropery.map((item, index) => {
+        const result = Property.map((item, index) => {
             return (
                 <ProductCard1
                     key={index}
@@ -120,7 +106,7 @@ function SearchProperty() {
                     dispatch(addfavourite(property._id))
                     dispatch(addtowishlist(property))
                 } catch (err) {
-                    alert(err)
+                    setShowErr(true)
                 }
             } else {
                 setOpenlogin(true)
@@ -128,13 +114,12 @@ function SearchProperty() {
         },
         [wishlist]
     )
+
     return (
         <Box mt={4}>
             <Container maxWidth="xl" sx={{ width: '94%' }}>
-                {Property.length == 0 ? (
-                    <Typography textAlign={'center'}>
-                        Result Not Found
-                    </Typography>
+                {loading ? (
+                   <Loading/>
                 ) : (
                     <Box
                         display={'flex'}
@@ -149,9 +134,15 @@ function SearchProperty() {
                             MAXIMUM={MAXIMUM}
                             MINIMUM={MINIMUM}
                         />
-                        <Grid container>
-                            <ProductCard />
-                        </Grid>
+                        {Property.length == 0 ? (
+                            <Typography variant="h5" textAlign={'center'}>
+                                Not Found
+                            </Typography>
+                        ) : (
+                            <Grid container>
+                                <ProductCard />
+                            </Grid>
+                        )}
                     </Box>
                 )}
             </Container>

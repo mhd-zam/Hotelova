@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Container } from '@mui/material'
 
 import TableComponent from '../component/TableComponent'
@@ -6,10 +6,12 @@ import { useEffect } from 'react'
 import { Cancelorder, getUserOrders } from '../api/api'
 import { useSelector } from 'react-redux'
 import PermissionAlert from '../component/PermissionAlert'
+import { ExternalContext } from '../context/CustomContext'
 
 function BookingPage() {
     const [open, setopen] = React.useState(false)
     const [id, setid] = React.useState(null)
+    const { setShowErr } = useContext(ExternalContext)
     const header = [
         { field: 'PropertyName', type: 1 },
         {
@@ -61,8 +63,8 @@ function BookingPage() {
                 setOrder(result)
                 setopen(false)
             })
-            .catch((err) => {
-                alert(err)
+            .catch(() => {
+                setShowErr(true)
             })
     }
 

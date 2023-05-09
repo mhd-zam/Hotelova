@@ -132,6 +132,8 @@ module.exports = {
         secure: true,
         sameSite: true,
         maxAge: 2 * 24 * 60 * 60 * 1000,
+        domain: "localhost:3000",
+        path: "/users",
       });
       res.status(200).json({
         _id: result._id,

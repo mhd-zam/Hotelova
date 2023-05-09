@@ -26,6 +26,7 @@ function Form() {
         setOpen,
         setAlert,
         setOpenlogin,
+        setShowErr
     } = useContext(ExternalContext)
     const dispatch = useDispatch()
 
@@ -45,12 +46,18 @@ function Form() {
         sendGmaildata(data)
             .then(({ data }) => {
                 console.log(data)
-                const { _id, phonenumber, email, username } = data
+                const { _id, phonenumber, email, username, accessToken } = data
                 if (phonenumber.length != 13 || email.length < 5) {
                     dispatch(setCheckUser(true))
                 }
                 let obj = {
-                    userDetails: { _id, phonenumber, email, username },
+                    userDetails: {
+                        _id,
+                        phonenumber,
+                        email,
+                        username,
+                        token: accessToken,
+                    },
                 }
                 dispatch(setUserDetails(obj))
                 setOpenlogin(false)
@@ -61,8 +68,13 @@ function Form() {
                 })
                 setOpen(false)
             })
-            .catch(() => {
-                setheaderror(true)
+            .catch((err) => {
+                if (err.response.status === 403) {
+                    setheaderror(true)
+                } else {
+                    setShowErr(true)
+                    setOpen(false)
+                }
             })
     }
 
@@ -88,8 +100,11 @@ function Form() {
                         .then(() => {
                             setIsfilled(true)
                         })
-                        .catch((err) => {
-                            alert(err)
+                        .catch(() => {
+                            seterror({
+                                error: true,
+                                helperText: 'phonenumber is invalid',
+                            })
                         })
                 })
                 .catch(() => {

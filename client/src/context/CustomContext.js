@@ -17,6 +17,7 @@ function CustomContext({ children }) {
         _id: '',
     })
     const [propertyEdit, setPropertyEdit] = useState(null)
+    const [ShowErr,setShowErr]=useState(false)
 
     return (
         <ExternalContext.Provider
@@ -33,6 +34,8 @@ function CustomContext({ children }) {
                 setuserDetails,
                 propertyEdit,
                 setPropertyEdit,
+                ShowErr,
+                setShowErr
             }}
         >
             {children}

@@ -11,7 +11,6 @@ module.exports = function (io) {
 
     socket.on("adduser", (userid) => {
       adduser(userid, socket.id)
-      console.log(user)
         io.emit('getuser',user)
       });
     

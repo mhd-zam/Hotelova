@@ -55,11 +55,11 @@ export function Addproperty(data, id) {
     return Axios.post('/addproperty', formData)
 }
 
-export function editProperty(data) {
+export function editProperty(data,userid) {
     console.log(data)
     const formData = new FormData()
     formData.append('Proid', data._id)
-    formData.append('hostid', data.userid)
+    formData.append('hostid',userid)
     formData.append('PropertyName', data['PropertyName'])
     formData.append('Description', data['Description'])
     formData.append('RoomType', data['RoomType'])
@@ -121,6 +121,8 @@ export function checkout(
     userid,
     adult,
     children,
+    Room,
+    bookedRoom,
     totalAmount
 ) {
     property.checkin = checkin
@@ -128,6 +130,8 @@ export function checkout(
     property.userid = userid
     property.adult = adult
     property.children = children
+    property.Room = Room
+    property.bookedRoom = bookedRoom
     property.totalAmount = totalAmount
     return Axios.post('/create-checkout-session', { property })
 }
@@ -156,9 +160,9 @@ export function RejectReservation(orderid) {
     return Axios.post(`/RejectReservation/${orderid}`)
 }
 
-export function searchProperty(destination, checkin, checkout) {
+export function searchProperty(destination, checkin, checkout, categoryFiter, min, max) {
     return Axios.get(
-        `/searchProperty?destination=${destination}&checkin=${checkin}&checkout=${checkout}`
+        `/searchProperty?destination=${destination}&checkin=${checkin}&checkout=${checkout}&propertyType=${categoryFiter}&minPrice=${min}&maxPrice=${max}`
     )
 }
 
@@ -200,4 +204,20 @@ export function getWalletAmt(userid) {
 
 export function getPropertyType() {
     return Axios.get('/getPropertyType')
+}
+
+export function checkRoomAvailability(data) {
+    return Axios.post('/checkRoomAvailability', data)
+}
+
+export function ValidateTheUser() {
+    return Axios.post('/ValidateUser')
+}
+
+export function submitComment(data,id) {
+    return Axios.post('/addComment',{id,data})
+}
+
+export function getAllHostProperty(userid) {
+    return Axios.get(`/getHostProperty?userid=${userid}`)
 }

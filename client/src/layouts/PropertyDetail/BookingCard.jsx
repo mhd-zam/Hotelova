@@ -1,19 +1,20 @@
-import React  from 'react'
+import React, { useEffect } from 'react'
 import { Box, Typography, Button, Card, Stack } from '@mui/material'
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import ChatIcon from '@mui/icons-material/Chat'
-import { addconverstaion, checkout } from '../../api/api'
+import { addconverstaion, checkRoomAvailability, checkout } from '../../api/api'
 import dayjs from 'dayjs'
 import { format } from 'date-fns'
 import { ExternalContext } from '../../context/CustomContext'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
+import { TransactionOpen } from '../../Redux/Checkout/CheckoutAction'
 
 const QuantityButton = ({ callback, children }) => (
     <Box
@@ -50,7 +51,12 @@ export default function BookingCard({ SingleProperty }) {
     const isLoggedin = useSelector((state) => state.user.isLoggedin)
     const { setOpenlogin } = React.useContext(ExternalContext)
     const [Room, setRoom] = React.useState(1)
-    const [guestTotalAmount, setGuestTotalAmount] = React.useState(SingleProperty.Price)
+    const bookedRoom = React.useRef
+    const RoomCount = React.useRef()
+    const dispatch = useDispatch()
+    const [guestTotalAmount, setGuestTotalAmount] = React.useState(
+        SingleProperty.Price
+    )
     let arr = Array.apply(null, {
         length: SingleProperty.Facility.Bedrooms + 1,
     }).map(Number.call, Number)
@@ -59,36 +65,23 @@ export default function BookingCard({ SingleProperty }) {
     let id = useSelector((state) => state.user.userDetails?._id)
     const navigate = useNavigate()
 
-    function checkdateAvaiable(startDate, endDate) {
-        let checkStart = SingleProperty.NotAvailable.findIndex(
-            (date) => date === startDate
-        )
-        let checkend = SingleProperty.NotAvailable.findIndex(
-            (date) => date === endDate
-        )
-        return checkStart == -1 && checkend == -1
-    }
-
-    function handlecheckout(value) {
-        const startDateStartOfDay = startDate.startOf('day')
-        const valueStartOfDay = dayjs(value).startOf('day')
-        if (startDateStartOfDay.isSame(valueStartOfDay)) {
-            setEndDate(dayjs(value).add(1, 'day'))
-        } else {
-            setEndDate(dayjs(value))
+    async function checkdateAvaiable(startDate, endDate, id) {
+        try {
+            const { data } = await checkRoomAvailability({
+                startDate,
+                endDate,
+                id,
+            })
+            RoomCount.current = data.length
+            if (data.length >= Room) {
+                let RoomAvailable = data.map((item) => item._id).slice(0, Room)
+                bookedRoom.current = RoomAvailable
+                return true
+            }
+            return false
+        } catch (err) {
+            alert(err)
         }
-
-        let diff = dayjs(value).diff(startDate, 'day') + 1
-        let nights = diff > 0 ? diff : 1
-        let TotalAmt = SingleProperty.Price * nights * Room
-        setTotalAmount(TotalAmt)
-        setGuestTotalAmount(TotalAmt)
-        setDays(diff)
-    }
-
-    function handlecheckin(value) {
-        setStartDate(dayjs(value))
-        setEndDate(dayjs(value).add(1, 'day'))
     }
 
     function handleLogin() {
@@ -102,8 +95,9 @@ export default function BookingCard({ SingleProperty }) {
 
     function handleChatWithHost() {
         let data = {
+            
             senderid: id,
-            receiverid: SingleProperty.hostid,
+            receiverid:SingleProperty.hostid,
         }
         addconverstaion(data)
             .then(() => {
@@ -114,12 +108,46 @@ export default function BookingCard({ SingleProperty }) {
             })
     }
 
-    function handleReserve() {
+    function handlecheckout(value) {
+        const startDateStartOfDay = startDate.startOf('day')
+        const valueStartOfDay = dayjs(value).startOf('day')
+        if (startDateStartOfDay.isSame(valueStartOfDay)) {
+            setEndDate(dayjs(value).add(1, 'day'))
+        } else {
+            setEndDate(dayjs(value))
+        }
+
+        let diff = dayjs(value).diff(startDate, 'day')
+        let nights = diff > 0 ? diff : 1
+        let TotalAmt = SingleProperty.Price * nights
+        setTotalAmount(TotalAmt)
+        setDays(diff)
+    }
+
+    useEffect(() => {
+        const TotalAmt = totalAmount * Room
+        setGuestTotalAmount(TotalAmt)
+    }, [totalAmount, Room])
+
+    function handlecheckin(value) {
+        setStartDate(dayjs(value))
+        if (dayjs(value).isAfter(endDate)) {
+        setEndDate(dayjs(value).add(1, 'day'))
+        }
+        let diff = endDate.diff(value, 'day')
+        let nights = diff > 0 ? diff : 1
+        let TotalAmt = SingleProperty.Price * nights
+        setTotalAmount(TotalAmt)
+        setDays(nights)
+    }
+
+    async function handleReserve() {
         const checkin = handledate(startDate)
         const checkOut = handledate(endDate)
-        const checkAvalability = checkdateAvaiable(
+        const checkAvalability = await checkdateAvaiable(
             checkin.slice(2),
-            checkOut.slice(2)
+            checkOut.slice(2),
+            SingleProperty._id
         )
 
         if (totalGuest / Room < 1) {
@@ -128,6 +156,7 @@ export default function BookingCard({ SingleProperty }) {
         }
 
         if (checkAvalability) {
+            dispatch(TransactionOpen())
             checkout(
                 SingleProperty,
                 checkin,
@@ -135,10 +164,11 @@ export default function BookingCard({ SingleProperty }) {
                 id,
                 adult,
                 children,
-                totalAmount+guestTotalAmount
+                Room,
+                bookedRoom.current,
+                guestTotalAmount
             )
                 .then((response) => {
-                    console.log(response)
                     window.location.href = response.data.url
                 })
                 .catch((err) => {
@@ -147,7 +177,9 @@ export default function BookingCard({ SingleProperty }) {
         } else {
             setAlert({
                 notify: true,
-                message: 'Dates not available',
+                message: `${
+                    RoomCount.current === 0 ? 'No' : RoomCount.current
+                } room available`,
                 action: 'error',
             })
         }
@@ -155,12 +187,10 @@ export default function BookingCard({ SingleProperty }) {
 
     const handleChange = (e) => {
         setAllowed(SingleProperty.Maxguest * e.target.value)
-        setRoom(e.target.value)
         setAdult(SingleProperty.Maxguest * e.target.value)
         setTotalGuest(SingleProperty.Maxguest * e.target.value)
         setChildren(0)
-        const TotalAmt = totalAmount * e.target.value
-        setGuestTotalAmount(TotalAmt)
+        setRoom(e.target.value)
     }
 
     return (
@@ -200,7 +230,34 @@ export default function BookingCard({ SingleProperty }) {
                         </DemoItem>
                     </DemoContainer>
                 </LocalizationProvider>
-
+                <Box display={'flex'} flexDirection="row" m={2}>
+                    <Typography flexGrow={1} variant="body1">
+                        Rooms
+                        <Typography variant="caption">
+                            {' '}
+                            ({SingleProperty.Maxguest} Guest per Room )
+                        </Typography>
+                    </Typography>
+                    <FormControl sx={{ m: 1 }}>
+                        <Select
+                            labelId="demo-simple-select-autowidth-label"
+                            id="demo-simple-select-autowidth"
+                            size="small"
+                            value={Room}
+                            onChange={handleChange}
+                            autoWidth
+                            sx={{ height: 25, width: 60 }}
+                        >
+                            {arr.map((item, i) => {
+                                return (
+                                    <MenuItem key={i} value={item}>
+                                        {item}
+                                    </MenuItem>
+                                )
+                            })}
+                        </Select>
+                    </FormControl>
+                </Box>
                 <Box display={'flex'} flexDirection="row" m={2}>
                     <Typography flexGrow={1} variant="body1">
                         Adult
@@ -236,7 +293,11 @@ export default function BookingCard({ SingleProperty }) {
                 </Box>
                 <Box display={'flex'} flexDirection="row" m={2}>
                     <Typography flexGrow={1} variant="body1">
-                        Children (age above 10)
+                        Children{' '}
+                        <Typography variant="caption">
+                            {' '}
+                            (Age above 10)
+                        </Typography>
                     </Typography>
                     <Stack direction={'row'} spacing={1}>
                         <QuantityButton
@@ -264,30 +325,6 @@ export default function BookingCard({ SingleProperty }) {
                         </QuantityButton>
                     </Stack>
                 </Box>
-                <Box display={'flex'} flexDirection="row" m={2}>
-                    <Typography flexGrow={1} variant="body1">
-                        Rooms
-                    </Typography>
-                    <FormControl sx={{ m: 1 }}>
-                        <Select
-                            labelId="demo-simple-select-autowidth-label"
-                            id="demo-simple-select-autowidth"
-                            size="small"
-                            value={Room}
-                            onChange={handleChange}
-                            autoWidth
-                            sx={{ height: 25, width: 60 }}
-                        >
-                            {arr.map((item, i) => {
-                                return (
-                                    <MenuItem key={i} value={item}>
-                                        {item}
-                                    </MenuItem>
-                                )
-                            })}
-                        </Select>
-                    </FormControl>
-                </Box>
 
                 <Stack direction={'column'} spacing={2}>
                     {isLoggedin ? (
@@ -311,17 +348,14 @@ export default function BookingCard({ SingleProperty }) {
                     ) : (
                         <Button variant="contained" onClick={handleLogin}>
                             Login
-                        </Button> 
+                        </Button>
                     )}
                 </Stack>
                 <Box display={'flex'} flexDirection={'row'}>
                     <Typography flexGrow={1}>
                         ₹ {SingleProperty.Price} x {days} nights
                     </Typography>
-                    <Typography>
-                        ₹{totalAmount}
-                        
-                    </Typography>
+                    <Typography>₹{totalAmount}</Typography>
                 </Box>
                 <Box display={'flex'} flexDirection={'row'}>
                     <Typography flexGrow={1} variant="h6" fontWeight={600}>

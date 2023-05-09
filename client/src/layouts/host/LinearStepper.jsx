@@ -39,7 +39,7 @@ function Findform({ activeStep, setValue, imgErr }) {
 function LinearStepper({ defaultData, isEdit }) {
     const [activeStep, setActiveStep] = useState(0)
     const [loading, setLoading] = useState(false)
-    const { setPropertyEdit } = useContext(ExternalContext)
+    const { setPropertyEdit, setShowErr } = useContext(ExternalContext)
     const userDetails = useSelector((state) => state.user.userDetails)
     const { trigger, ...methods } = useForm({
         defaultValues: defaultData,
@@ -70,7 +70,6 @@ function LinearStepper({ defaultData, isEdit }) {
     const [imgErr, setimgErr] = useState(false)
     async function onSubmit(data) {
         console.log(data)
-
         if (activeStep < 4) {
             handleNext()
         } else {
@@ -83,15 +82,17 @@ function LinearStepper({ defaultData, isEdit }) {
                 console.log(data)
                 setActiveStep(activeStep + 1)
                 setLoading(true)
-                if (isEdit) {
-                    editProperty(data).then(() => {
+                try {
+                    if (isEdit) {
+                        await editProperty(data, userDetails._id)
                         setLoading(false)
                         setPropertyEdit(null)
-                    })
-                } else {
-                    Addproperty(data, userDetails._id).then(() => {
+                    } else {
+                        await Addproperty(data, userDetails._id)
                         setLoading(false)
-                    })
+                    }
+                } catch (Err) {
+                    setShowErr(true)
                 }
             }
         }

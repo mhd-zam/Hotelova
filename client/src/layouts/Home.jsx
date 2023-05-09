@@ -35,7 +35,7 @@ function Home() {
     const [Loading, setLoading] = useState(true)
     const [page, setPage] = useState(0)
     const [isTheEnd, setIsTheEnd] = useState(false)
-    const { setOpenlogin } = useContext(ExternalContext)
+    const { setOpenlogin,setShowErr} = useContext(ExternalContext)
     const intObserver = useRef()
 
     useEffect(() => {
@@ -54,7 +54,7 @@ function Home() {
                 dispatch(AddProperties(data))
                 setLoading(false)
             } catch (err) {
-                console.log(err)
+                setShowErr(true)
             }
         }
         fetchProduct()
@@ -71,7 +71,7 @@ function Home() {
                     const { data } = await getWishlist(userid)
                     dispatch(addallwishlist(data))
                 } catch (err) {
-                    alert(err)
+                    setShowErr(true)
                 }
             }
             fetchWishlist()
@@ -129,7 +129,7 @@ function Home() {
                 dispatch(addfavourite(property._id))
                 dispatch(addtowishlist(property))
             } catch (err) {
-                alert(err)
+                setShowErr(true)
             }
         } else {
             setOpenlogin(true)
@@ -143,7 +143,7 @@ function Home() {
                 dispatch(addfavourite(id))
                 dispatch(removefromwishlist(id))
             } catch (err) {
-                alert(err)
+                setShowErr(true)
             }
         }
     }

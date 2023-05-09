@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useContext } from 'react'
 import {
     Container,
     Card,
@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux'
 import { getMessages } from '../../api/api'
 import { postMessage } from '../../api/api'
 import { io } from 'socket.io-client'
+import { ExternalContext } from '../../context/CustomContext'
 export default function ChatLayout() {
     const [chatData, setChatData] = useState([])
     const [currentchat, setCurrentChat] = useState()
@@ -28,6 +29,7 @@ export default function ChatLayout() {
     const user = useSelector((state) => state.user.userDetails)
     const socket = useRef()
     const chatRef = useRef()
+    const { setShowErr } = useContext(ExternalContext)
 
     useEffect(() => {
         socket.current = io('http://localhost:4000')
@@ -48,7 +50,6 @@ export default function ChatLayout() {
 
     useEffect(() => {
         socket.current.on('getMessage', (data) => {
-            console.log(data)
             setArrivalMessage({
                 senderid: data.senderid,
                 text: data.text,
@@ -63,7 +64,7 @@ export default function ChatLayout() {
                 const { data } = await getconversation(userid)
                 setChatData(data)
             } catch (err) {
-                alert(err)
+                setShowErr(true)
             }
         }
         getchatuser()
@@ -75,7 +76,7 @@ export default function ChatLayout() {
                 const { data } = await getMessages(currentchat)
                 setMessages(data)
             } catch (err) {
-                alert(err)
+                setShowErr(true)
             }
         }
         if (currentchat) {
@@ -127,8 +128,8 @@ export default function ChatLayout() {
                 setMessages([...messages, data])
                 setNewMessage('')
             })
-            .catch((err) => {
-                alert(err)
+            .catch(() => {
+                setShowErr(true)
             })
     }
 

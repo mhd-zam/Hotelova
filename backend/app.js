@@ -10,9 +10,10 @@ const morgan = require("morgan");
 const session = require("express-session");
 const http = require("http");
 const server = http.createServer(app);
-const io = require("socket.io")(server, {
+const io = require("socket.io")(server,{path:'/server/socket.io/'},{
   cors: {
-    origin: "http://localhost:3000"
+    origin: "http://localhost:3000",
+    methods:["GET","POST","OPTIONS"]
   },
 });
 require('./listeners/socketManager')(io)

@@ -34,15 +34,34 @@ const ProfileField = styled(TextField)(({ theme }) => ({
     margin: theme.spacing(1),
 }))
 
-export default function ProfilePage({ name, email, phoneNumber, wallet }) {
-    function stringAvatar(name) {
+function stringAvatar(name) {
+    if (!name) {
+        // Return a default avatar if the name is not provided
         return {
             sx: {
                 bgcolor: '#FA6616',
             },
-            children: `${name.split('')[0][0]}${name.split('')[1][0]}`,
+            children: 'az',
         }
     }
+
+    const nameArray = name.split('')
+    if (nameArray.length < 2) {
+        // If the name has only one character, use it twice to form the initials
+        nameArray.push(nameArray[0])
+    }
+
+    return {
+        sx: {
+            bgcolor: '#FA6616',
+        },
+        children: `${nameArray[0][0]}${nameArray[1][0]}`,
+    }
+}
+
+
+export default function ProfilePage({ name, email, phoneNumber, wallet }) {
+  
     return (
         <ProfileContainer>
             <Grid container>

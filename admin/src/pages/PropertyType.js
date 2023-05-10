@@ -76,7 +76,6 @@ function PropertyType() {
   }
 
   function editRoomtype(id) {
-    alert(id)
     setid(id)
     let editDocument = AllRoomType.find((elemt) => elemt._id === id)
     let { RoomType, image } = editDocument

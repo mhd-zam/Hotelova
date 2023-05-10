@@ -6,14 +6,13 @@ import { ExternalContext } from '../context/CustomContext'
 import Somethingwentwrong from './Somethingwentwrong'
 function ProfilePage() {
     const { username, phonenumber, email, address, _id } = useSelector(
-        (state) => state.user.userDetails
+        (state) => state.user?.userDetails
     )
     const { setShowErr, ShowErr } = useContext(ExternalContext)
     const [wallet, setWallet] = useState(0)
     useEffect(() => {
         getWalletAmt(_id)
             .then(({ data }) => {
-                console.log(data)
                 setWallet(data.Wallet)
             })
             .catch(() => {

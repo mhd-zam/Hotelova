@@ -32,7 +32,7 @@ export default function ChatLayout() {
     const { setShowErr } = useContext(ExternalContext)
 
     useEffect(() => {
-        socket.current = io(process.env.REACT_CHAT_URL,{path:'/server/socket.io/'})
+        socket.current = io('https://www.hotelova.site',{path:'/server/socket.io/'})
     }, [])
 
     useEffect(() => {

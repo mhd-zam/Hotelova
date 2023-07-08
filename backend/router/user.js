@@ -43,7 +43,7 @@ const {
   getAllConversation,
   addMessages,
   getMessages,
-} = require("../controller/Chathelper");
+} = require("../controller/chathelper");
 const { manageComment } = require("../controller/comment");
 
 router.post("/otplogin", otplogin);

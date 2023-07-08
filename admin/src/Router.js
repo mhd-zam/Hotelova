@@ -25,11 +25,11 @@ function Router() {
     <ErrorBoundary FallbackComponent={ErrorHandler}>
       <Themeprovider>
         <Externalcontext>
-          <BrowserRouter basename="/Admin">
+          <BrowserRouter basename="/">
             <Routes>
               <Route element={<LoginAuth />}>
                 <Route
-                  path="/Admin"
+                  path="/"
                   element={<Navigate to="/login" replace />}
                 />
                 <Route

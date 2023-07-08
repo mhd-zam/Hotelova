@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import React, { useState, useContext } from "react";
 import { loginDetails } from "../Api/RestApi";

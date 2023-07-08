@@ -1,0 +1,46 @@
+name: client
+
+on:
+  push:
+    branches: [ "main" ]
+
+defaults:
+  run:
+    working-directory: ./client
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+    - name: Install npm dependencies
+      run: npm install
+    - name: Run build task
+      env:
+        REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID}}
+        REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY}}
+        REACT_APP_AUTHDOMAIN: ${{ secrets.REACT_APP_AUTHDOMAIN}}
+        REACT_APP_PROJECTID: ${{ secrets.REACT_APP_PROJECTID}}
+        REACT_APP_STORAGEBUCKET: ${{ secrets.REACT_APP_STORAGEBUCKET}}
+        REACT_APP_MESSAGINGSENDERID: ${{ secrets.REACT_APP_MESSAGINGSENDERID}}
+        REACT_APPID: ${{ secrets.REACT_APPID}}
+        REACT_MESUREMENTID: ${{ secrets.REACT_MESUREMENTID}}
+        REACT_APP_MAP_ACCESSTOKEN: ${{ secrets.REACT_APP_MAP_ACCESSTOKEN}}
+      run: npm run build --if-present
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "client/build/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: "/home/ubuntu/client"
+          EXCLUDE: "/dist/, /node_modules/"
+

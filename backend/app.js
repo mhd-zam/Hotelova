@@ -25,7 +25,7 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: ["http://localhost:3000","http://localhost:3001"],
+    origin: ["http://hotelova.site","http://admin.hotelova.site"],
     credentials: true,
   })
 );
@@ -58,9 +58,9 @@ mongoose
 
 
 
-app.use("/users", userRouter);
+app.use("/server/users", userRouter);
 
-app.use("/admin", adminRouter);
+app.use("/server/admin", adminRouter);
 
 server.listen(4000, () => {
   console.log("server running");

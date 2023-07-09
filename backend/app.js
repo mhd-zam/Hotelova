@@ -12,7 +12,7 @@ const http = require("http");
 const server = http.createServer(app);
 const io = require("socket.io")(server,{path:'/server/socket.io/'},{
   cors: {
-    origin: "https://hotelova.site",
+    origin: "https://hotelova.site/",
     methods:["GET","POST","OPTIONS"]
   },
 });

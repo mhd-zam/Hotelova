@@ -18,7 +18,7 @@ function FilterBar({
                     padding: 4,
                     mt: 2,
                     width: 250,
-                    height: 400,
+                    height: 465,
                     m: 2,
                     boxShadow: 4,
                 }}

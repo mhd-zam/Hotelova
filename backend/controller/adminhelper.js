@@ -244,7 +244,7 @@ module.exports = {
         { $group: { _id: 0, weeklyAmount: { $sum: "$totalprice" } } },
         { $project: { weeklyAmount: 1, _id: 0 } },
       ]);
-      allData["moneyGeneratedPerWeek"] = moneyGeneratedPerWeek[0].weeklyAmount
+      allData["moneyGeneratedPerWeek"] = moneyGeneratedPerWeek[0]?.weeklyAmount
       res.status(200).json(allData);
     } catch (err) {
       console.log(err)

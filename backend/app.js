@@ -12,7 +12,7 @@ const http = require("http");
 const server = http.createServer(app);
 const io = require("socket.io")(server,{path:'/server/socket.io/'},{
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://hotelova.site",
     methods:["GET","POST","OPTIONS"]
   },
 });
@@ -25,7 +25,7 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: ["http://hotelova.site","http://admin.hotelova.site"],
+    origin: ["https://hotelova.site","https://admin.hotelova.site"],
     credentials: true,
   })
 );

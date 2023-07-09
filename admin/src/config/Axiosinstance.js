@@ -1,7 +1,7 @@
 import axios from "axios"
 
 let Axios = axios.create({
-    baseURL: 'https://www.hotelova.site/server/admin',
+    baseURL: 'https://admin.hotelova.site/server/admin',
     headers: {
         'Content-Type': 'application/json'
     },

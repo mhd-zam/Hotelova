@@ -73,15 +73,15 @@ module.exports = {
             bookedRoom: bookedRoom.toString(),
           },
           mode: "payment",
-          success_url: "http://localhost:3000/success",
-          cancel_url: "http://localhost:3000/cancel",
+          success_url: "http://hotelova.site/success",
+          cancel_url: "http://hotelova.site/cancel",
         });
         req.session.verifyid = session.id;
         res.send({ url: session.url });
         return;
       }
     } catch (err) {
-      res.send({ url: "http://localhost:3000/cancel" })
+      res.send({ url: "http://hotelova.site/cancel" })
     }
   },
 

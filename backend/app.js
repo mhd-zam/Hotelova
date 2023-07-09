@@ -25,7 +25,7 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: ["https://hotelova.site","https://admin.hotelova.site/"],
+    origin: ["https://www.hotelova.site","https://admin.hotelova.site/"],
     credentials: true,
   })
 );

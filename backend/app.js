@@ -10,7 +10,7 @@ const morgan = require("morgan");
 const session = require("express-session");
 const http = require("http");
 const server = http.createServer(app);
-const io = require("socket.io")(server,{
+const io = require("socket.io")(server,{path:'/server/'},{
   cors: {
     origin: "https://hotelova.site",
     methods:["GET","POST","OPTIONS"]

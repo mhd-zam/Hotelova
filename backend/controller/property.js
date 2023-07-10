@@ -162,11 +162,13 @@ module.exports = {
       let Property = await property.aggregate([
         { $match: {} },
         {
-          $addFields: {
-            avgRating: {
-              $avg: { $map: { input: "$comments", in: "$$this.rating" } },
-            },
-          },
+      $addFields: {
+    avgRating: {
+      $round: {
+        $avg: { $map: { input: "$comments", in: "$$this.rating" } },
+        },
+        },
+        },
         },
         {
           $lookup: {

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Box, Container, Grid, useMediaQuery, Typography } from '@mui/material'
+import { Box, Container, Grid, useMediaQuery } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPropertyType, postwishlist, searchProperty } from '../api/api'
 import ProductCard1 from '../component/ProductCard1'
@@ -13,7 +13,8 @@ import {
 import { ExternalContext } from '../context/CustomContext'
 import { useContext } from 'react'
 import FilterBar from './FilterBar'
-import Loading from '../pages/Loading'
+import Notsearchresult from '../pages/Notsearchresult'
+import Scrollloading from '../pages/Scrollloading'
 function SearchProperty() {
     const naviagate = useNavigate()
     const { setShowErr } = useContext(ExternalContext)
@@ -34,6 +35,7 @@ function SearchProperty() {
     const [MINIMUM, setMINIMUM] = useState(0)
     const matches = useMediaQuery('(min-width:800px)')
     const [loading, setLoading] = useState(true)
+    const Skeleton = Array.from({ length: 6 })
     useEffect(() => {
         setLoading(true)
         async function getSearchProperty() {
@@ -117,34 +119,41 @@ function SearchProperty() {
 
     return (
         <Box mt={4}>
-            <Container maxWidth="xl" sx={{ width: '94%' }}>
-                {loading ? (
-                   <Loading/>
-                ) : (
-                    <Box
-                        display={'flex'}
-                        flexDirection={matches ? 'row' : 'column'}
-                    >
-                        <FilterBar
-                            propertType={propertType}
-                            setCategoryFilter={setCategoryFilter}
-                            handlePrice={handlePrice}
-                            MIN={min}
-                            MAX={max}
-                            MAXIMUM={MAXIMUM}
-                            MINIMUM={MINIMUM}
-                        />
-                        {Property.length == 0 ? (
-                            <Typography variant="h5" textAlign={'center'}>
-                                Not Found
-                            </Typography>
-                        ) : (
-                            <Grid container>
+            <Container maxWidth="xl" sx={{ width: '100%' }}>
+                <Box
+                    display={'flex'}
+                    flexDirection={matches ? 'row' : 'column'}
+                >
+                    <FilterBar
+                        propertType={propertType}
+                        setCategoryFilter={setCategoryFilter}
+                        handlePrice={handlePrice}
+                        MIN={min}
+                        MAX={max}
+                        MAXIMUM={MAXIMUM}
+                        MINIMUM={MINIMUM}
+                    />
+                    {Property.length == 0 ? (
+                        <Box
+                            justifyContent={'center'}
+                            width={'100%'}
+                            alignItems={'center'}
+                        >
+                            <Notsearchresult />
+                        </Box>
+                    ) : (
+                        <Grid container>
+                            {loading ? (
+                                <Scrollloading
+                                    size={4}
+                                    numberofskelton={Skeleton}
+                                />
+                            ) : (
                                 <ProductCard />
-                            </Grid>
-                        )}
-                    </Box>
-                )}
+                            )}
+                        </Grid>
+                    )}
+                </Box>
             </Container>
         </Box>
     )

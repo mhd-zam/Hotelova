@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { ExternalContext } from '../../context/CustomContext'
 import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
 import { Stack } from '@mui/system'
 import { ThemeProvider } from '@mui/material/styles'
@@ -14,9 +13,9 @@ import { checkblocked, sendGmaildata } from '../../api/api'
 import { Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 import InputTextField from '../../component/BasicTextFields'
-// import useMediaQuery from '@mui/material/useMediaQuery'
 import { useDispatch } from 'react-redux'
 import { setCheckUser, setUserDetails } from '../../Redux/user/userAction'
+import Select from '@mui/material/Select'
 
 function Form() {
     const {
@@ -26,7 +25,7 @@ function Form() {
         setOpen,
         setAlert,
         setOpenlogin,
-        setShowErr
+        setShowErr,
     } = useContext(ExternalContext)
     const dispatch = useDispatch()
 
@@ -45,7 +44,6 @@ function Form() {
     function handlegooglelogin(data) {
         sendGmaildata(data)
             .then(({ data }) => {
-                console.log(data)
                 const { _id, phonenumber, email, username, accessToken } = data
                 if (phonenumber.length != 13 || email.length < 5) {
                     dispatch(setCheckUser(true))
@@ -122,8 +120,18 @@ function Form() {
     }
 
     const handleCountrycode = (e) => {
-        alert(e.target.value)
         setuserDetails({ ...userDetails, countrycode: e.target.value })
+    }
+    const ITEM_HEIGHT = 48
+    const ITEM_PADDING_TOP = 4
+
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
     }
 
     return (
@@ -143,14 +151,14 @@ function Form() {
                 <Typography variant="body1" color="red">
                     {headerror ? 'Blocked' : ''}
                 </Typography>
-                <TextField
-                    id="outlined-select-currency"
-                    select
-                    color="success"
-                    label="Country"
-                    defaultValue="+91"
+                <Select
+                    labelId="demo-multiple-name-label"
+                    id="demo-multiple-name"
+                    value={userDetails.countrycode}
                     helperText="Please select your country"
                     onChange={handleCountrycode}
+                    MenuProps={MenuProps}
+                    fullWidth
                 >
                     {[
                         Flag.map((option) => (
@@ -159,18 +167,13 @@ function Form() {
                                 value={option.dial_code}
                             >
                                 <Stack direction={'row'} spacing={2}>
-                                    <img
-                                        src={`/asset/png/${option.code}.png`}
-                                        width={20}
-                                        height={20}
-                                        alt=""
-                                    />
-                                    {option.name + ' ' + option.dial_code}
+                                 <span style={{marginRight:'1px'}} className={`fi fi-${option.code.toLowerCase()} fis`}></span>
+                                    <span>{option.name + ' ' + option.dial_code}</span>
                                 </Stack>
                             </MenuItem>
                         )),
                     ]}
-                </TextField>
+                </Select>
 
                 <InputTextField
                     error={error}
@@ -203,7 +206,7 @@ function Form() {
                         handlegooglelogin(credentialResponse.credential)
                     }}
                     onError={() => {
-                        console.log('Login Failed')
+                        alert('Login Failed')
                     }}
                 />
             </Stack>

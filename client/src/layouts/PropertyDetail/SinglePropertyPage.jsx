@@ -58,7 +58,7 @@ export default function SinglePropertyPage() {
                             flexGrow={1}
                             variant="h4"
                         >{`${SingleProperty.RoomType} hosted by ${SingleProperty.host?.FullName}`}</Typography>
-                        <  Avatar />
+                        <Avatar />
                     </Box>
                 </Grid>
                 <Card sx={{ mt: 2, boxShadow: 2 }}>

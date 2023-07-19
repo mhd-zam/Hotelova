@@ -11,6 +11,8 @@ import { logout } from '../../Redux/user/userAction'
 import { LogoutApi } from '../../api/api'
 import { useNavigate } from 'react-router-dom'
 import { logoutWishlist } from '../../Redux/wishlist/wishlistAction'
+import BecomeHost from './BecomeHost'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 export default function BasicMenu() {
     const [anchorEl, setAnchorEl] = useState(null)
@@ -20,6 +22,7 @@ export default function BasicMenu() {
     const isLoggedin = useSelector((state) => state.user.isLoggedin)
     const isHosted = useSelector((state) => state.user.ishosted)
     const navigate = useNavigate()
+    const matches = useMediaQuery('(min-width:600px)')
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
@@ -72,7 +75,7 @@ export default function BasicMenu() {
             <Menu
                 sx={{
                     '& .MuiPaper-root': {
-                        minWidth: 120,
+                        minWidth: 100,
                     },
                 }}
                 id="basic-menu"
@@ -83,6 +86,12 @@ export default function BasicMenu() {
                     'aria-labelledby': 'basic-button',
                 }}
             >
+                {matches ? null : (
+                    <MenuItem>
+                        <BecomeHost />
+                    </MenuItem>
+                )}
+
                 {isLoggedin ? (
                     <>
                         {isHosted && (

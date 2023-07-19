@@ -59,9 +59,7 @@ function stringAvatar(name) {
     }
 }
 
-
 export default function ProfilePage({ name, email, phoneNumber, wallet }) {
-  
     return (
         <ProfileContainer>
             <Grid container>

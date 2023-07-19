@@ -97,7 +97,7 @@ function Banner() {
             >
                 <Stack direction={matches ? 'row' : 'column'} spacing={1}>
                     <Box mt={1}>
-                        <Box sx={{ minWidth: '370px', width: '100%' }}>
+                        <Box sx={{ minWidth: '320px', width: '100%' }}>
                             <Autocomplete
                                 id="free-solo-2-demo"
                                 options={suggestions}

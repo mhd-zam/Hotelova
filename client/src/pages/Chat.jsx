@@ -5,7 +5,7 @@ import Somethingwentwrong from './Somethingwentwrong'
 
 function Chat() {
     const { ShowErr } = useContext(ExternalContext)
-    return ShowErr?<Somethingwentwrong />:<ChatLayout />
+    return ShowErr ? <Somethingwentwrong /> : <ChatLayout />
 }
 
 export default Chat

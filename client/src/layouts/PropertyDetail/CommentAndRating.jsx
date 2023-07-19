@@ -7,8 +7,10 @@ import Divider from '@mui/material/Divider'
 import { useSelector } from 'react-redux'
 import { submitComment } from '../../api/api'
 
-function CommentAndRating({SingleProperty}) {
-    const [comments, setComments] = useState(SingleProperty['comments']?SingleProperty.comments:[])
+function CommentAndRating({ SingleProperty }) {
+    const [comments, setComments] = useState(
+        SingleProperty['comments'] ? SingleProperty.comments : []
+    )
     const [comment, setComment] = useState({})
     const [rating, setRating] = useState(0)
     const commentsEndRef = useRef(null)
@@ -27,7 +29,7 @@ function CommentAndRating({SingleProperty}) {
 
     const handleCommentSubmit = async () => {
         try {
-            await submitComment(comment,SingleProperty._id)
+            await submitComment(comment, SingleProperty._id)
             setComments([...comments, comment])
             console.log(comment)
             console.log(comments)

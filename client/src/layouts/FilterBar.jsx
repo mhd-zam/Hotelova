@@ -12,7 +12,7 @@ function FilterBar({
     MINIMUM,
 }) {
     return (
-        <Box>
+        <Box mr={5}>
             <Card
                 sx={{
                     padding: 4,

@@ -95,9 +95,8 @@ export default function BookingCard({ SingleProperty }) {
 
     function handleChatWithHost() {
         let data = {
-            
             senderid: id,
-            receiverid:SingleProperty.hostid,
+            receiverid: SingleProperty.hostid,
         }
         addconverstaion(data)
             .then(() => {
@@ -132,7 +131,7 @@ export default function BookingCard({ SingleProperty }) {
     function handlecheckin(value) {
         setStartDate(dayjs(value))
         if (dayjs(value).isAfter(endDate)) {
-        setEndDate(dayjs(value).add(1, 'day'))
+            setEndDate(dayjs(value).add(1, 'day'))
         }
         let diff = endDate.diff(value, 'day')
         let nights = diff > 0 ? diff : 1

@@ -33,7 +33,6 @@ export default function Viewhosted() {
         navigate('/Edit-listed-property')
     }
 
-    
     function alertPop(ID) {
         setid(ID)
         setopen(true)
@@ -42,7 +41,9 @@ export default function Viewhosted() {
     function removeProperty() {
         deleteProperty(id)
             .then(() => {
-                setHostProperty((prev) =>prev.filter((item) => item._id !== id))
+                setHostProperty((prev) =>
+                    prev.filter((item) => item._id !== id)
+                )
                 setopen(false)
             })
             .catch(() => setShowErr(true))
@@ -51,7 +52,6 @@ export default function Viewhosted() {
     function CancelAction() {
         setopen(false)
     }
-
 
     return (
         <Box mt={5}>

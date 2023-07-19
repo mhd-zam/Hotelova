@@ -49,12 +49,25 @@ const Otpform = () => {
                 sendOtopData(user)
                     .then((response) => {
                         console.log(response)
-                        const { _id, phonenumber, email, username,accessToken} =
-                            response.data
+                        const {
+                            _id,
+                            phonenumber,
+                            email,
+                            username,
+                            accessToken,
+                        } = response.data
                         if (phonenumber.length != 13 || email.length < 5) {
                             dispatch(setCheckUser(true))
                         }
-                        let obj = {userDetails: { _id, phonenumber, email, username,token:accessToken}}
+                        let obj = {
+                            userDetails: {
+                                _id,
+                                phonenumber,
+                                email,
+                                username,
+                                token: accessToken,
+                            },
+                        }
                         dispatch(setUserDetails(obj))
                         setOpenlogin(false)
                         setAlert({

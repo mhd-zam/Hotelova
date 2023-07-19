@@ -27,6 +27,7 @@ import {
 import { addallwishlist } from '../Redux/wishlist/wishlistAction'
 import { useContext } from 'react'
 import { ExternalContext } from '../context/CustomContext'
+import Scrollloading from '../pages/Scrollloading'
 function Home() {
     const dispatch = useDispatch()
     const naviagate = useNavigate()
@@ -35,8 +36,9 @@ function Home() {
     const [Loading, setLoading] = useState(true)
     const [page, setPage] = useState(0)
     const [isTheEnd, setIsTheEnd] = useState(false)
-    const { setOpenlogin,setShowErr} = useContext(ExternalContext)
+    const { setOpenlogin, setShowErr } = useContext(ExternalContext)
     const intObserver = useRef()
+    const Skeleton = Array.from({ length: 4 })
 
     useEffect(() => {
         dispatch(toInitialState())
@@ -183,8 +185,13 @@ function Home() {
                         </Typography>
                         <Grid container>
                             <Card />
+                            {Loading ? (
+                                <Scrollloading
+                                    size={3}
+                                    numberofskelton={Skeleton}
+                                />
+                            ) : null}
                         </Grid>
-                        {Loading ? <Typography>Loading</Typography> : null}
                     </Container>
                 </>
             )}

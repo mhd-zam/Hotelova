@@ -6,7 +6,7 @@ import Somethingwentwrong from './Somethingwentwrong'
 function HostDetailPage() {
     const { ShowErr } = useContext(ExternalContext)
 
-    return ShowErr ? <Somethingwentwrong/> : <HostApplyPage />
+    return ShowErr ? <Somethingwentwrong /> : <HostApplyPage />
 }
 
 export default HostDetailPage

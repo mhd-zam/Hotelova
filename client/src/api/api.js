@@ -55,11 +55,11 @@ export function Addproperty(data, id) {
     return Axios.post('/addproperty', formData)
 }
 
-export function editProperty(data,userid) {
+export function editProperty(data, userid) {
     console.log(data)
     const formData = new FormData()
     formData.append('Proid', data._id)
-    formData.append('hostid',userid)
+    formData.append('hostid', userid)
     formData.append('PropertyName', data['PropertyName'])
     formData.append('Description', data['Description'])
     formData.append('RoomType', data['RoomType'])
@@ -160,7 +160,14 @@ export function RejectReservation(orderid) {
     return Axios.post(`/RejectReservation/${orderid}`)
 }
 
-export function searchProperty(destination, checkin, checkout, categoryFiter, min, max) {
+export function searchProperty(
+    destination,
+    checkin,
+    checkout,
+    categoryFiter,
+    min,
+    max
+) {
     return Axios.get(
         `/searchProperty?destination=${destination}&checkin=${checkin}&checkout=${checkout}&propertyType=${categoryFiter}&minPrice=${min}&maxPrice=${max}`
     )
@@ -214,8 +221,8 @@ export function ValidateTheUser() {
     return Axios.post('/ValidateUser')
 }
 
-export function submitComment(data,id) {
-    return Axios.post('/addComment',{id,data})
+export function submitComment(data, id) {
+    return Axios.post('/addComment', { id, data })
 }
 
 export function getAllHostProperty(userid) {
